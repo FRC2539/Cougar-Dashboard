@@ -8,7 +8,7 @@ export default class App extends Component {
     constructor() {
         super()
 
-        this.state = {nt: {}, ntHeadings: new Set(), useTestData: false, blackList: ["LiveWindow"]}
+        this.state = {nt: {}, ntHeadings: new Set(), useTestData: true, blackList: ["LiveWindow"]}
     }
 
     populateNetworkTablesMap(keys) {
