@@ -18,7 +18,7 @@ export default class Mechanisms extends Component {
             <div className="shadow bg-orange col-span-4 row-span-2 rounded-lg p-2 mt-1">
                 <div className="flex flex-row font-medium justify-between items-center">
                     <div className="text-left self-start">Shooter RPM:</div>
-                    <div className="text-right self-end">{this.props.nt[this.shooterRPM]}</div>
+                    <div className="text-right self-end">{Math.round(this.props.nt[this.shooterRPM])}</div>
                 </div>
 
                 <hr/>

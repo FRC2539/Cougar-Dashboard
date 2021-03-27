@@ -10,7 +10,7 @@ export default class Limelight extends Component {
     render() {
         return (
             <div className="h-3/4 w-full">
-                    {/* <img id="limelight-feed" className="" src={this.props.nt[this.limelightKey]} /> */}
+                {/* <img id="limelight-feed" className="" src={this.props.nt[this.limelightKey]} /> */}
             </div>
         )
     }
