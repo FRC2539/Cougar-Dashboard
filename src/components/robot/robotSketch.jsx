@@ -17,7 +17,7 @@ export default class RobotSketch extends Component {
     componentDidMount() {        
         const sketchElement = document.getElementById('robot-section')
 
-        const networkTables = this.networkTables
+        const networkTables = this.networkTables()
 
         const getRobotWheelAngles = () => {
             // In the future, get this from network tables
@@ -79,10 +79,14 @@ export default class RobotSketch extends Component {
             return { tl, tr, bl, br }
         }
 
-        const drawWheels = ({angles, p, robotPosition, robotSideWidth}) => {
+        const drawWheels = ({angles, p, robotPosition, robotSideWidth, speedPercent = 1}) => {
             // Maybe make this a method to get the wheel dimensions
-            const wheelHeight = 0.22 * robotSideWidth
-            const wheelWidth = 0.08 * robotSideWidth
+
+            const percent = p.constrain(speedPercent, 0, 1) // Note: only one speed for all the wheels
+
+            const wheelHeight = 0.22 * robotSideWidth * percent
+            const wheelWidth = 0.02 * robotSideWidth
+            const arrowTriangleWidth = 0.04 * robotSideWidth
 
             const wheelPositions = wheelPositionsOnSketch({robotPosition, robotSideWidth})
 
@@ -95,6 +99,14 @@ export default class RobotSketch extends Component {
                 p.rotate(angle)
                 p.rectMode(p.CENTER)
                 p.rect(0, 0, wheelWidth, wheelHeight)
+                p.triangle(
+                    0, // x1
+                    -wheelHeight / 2 - arrowTriangleWidth / 1.5, // y1 
+                    -arrowTriangleWidth / 1.5, // x2 
+                    -wheelHeight / 2 + arrowTriangleWidth / 1.5, // y2
+                    arrowTriangleWidth / 1.5, // x3
+                    -wheelHeight / 2 + arrowTriangleWidth / 1.5 // y3
+                )
                 p.pop()
             }
 
@@ -184,6 +196,7 @@ export default class RobotSketch extends Component {
                 p.text(speedString, position.x, position.y + (fontSize / 4))
             }
 
+            // TODO make similar blocks of code loop through arrays with the indices needed rather than repeat code
             // Draw top left info
             { // Start a new scope for constants
                 const {angleString, speedString} = getWheelInfoStrings(angles[0][0], speeds[0][0])
