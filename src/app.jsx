@@ -26,30 +26,38 @@ export default class App extends Component {
     }
 
     putValueNT(key, value) {
-        NetworkTables.putValue(key, value)
-    }
+        if(!this.state.useTestData) NetworkTables.putValue(key, value)
 
-    getHeadingsFromNT() {
-        let ntHeadings = new Set()
+        if(this.state.useTestData) {
+            const _nt = this.state.nt
 
-        for(const [key, _] of Object.entries(this.state.nt)) {
-            if(!ntHeadings.has(this.getHeading(key))) {
-                ntHeadings.add(this.getHeading(key))
-            }
+            _nt[key] = value
+
+            this.setState({nt: _nt})
         }
-
-        this.setState({ntHeadings})
     }
 
-    getHeading(key) {
-        let path = key.split("/")
-        return path[1]
-    }
+    // getHeadingsFromNT() {
+    //     let ntHeadings = new Set()
 
-    splitKeyToPath(key) {
-        let path = key.split("/")
-        return path.slice(1, path.length)
-    }
+    //     for(const [key, _] of Object.entries(this.state.nt)) {
+    //         if(!ntHeadings.has(this.getHeading(key))) {
+    //             ntHeadings.add(this.getHeading(key))
+    //         }
+    //     }
+
+    //     this.setState({ntHeadings})
+    // }
+
+    // getHeading(key) {
+    //     let path = key.split("/")
+    //     return path[1]
+    // }
+
+    // splitKeyToPath(key) {
+    //     let path = key.split("/")
+    //     return path.slice(1, path.length)
+    // }
 
     changeMapKey(key, value) {
         if(!this.keyIsBlackListed(key)) {

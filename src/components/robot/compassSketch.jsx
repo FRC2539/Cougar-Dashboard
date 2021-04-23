@@ -64,14 +64,16 @@ export default class CompassSketch extends Component {
         const drawCompassInfo = (p, position, canvasWidthOrHeight, {angle = 0, speedPercent = 1} = {}) => {
             const percent = p.constrain(speedPercent, 0, 1)
 
-            const infoString = `${p.round(angle)}° - ${p.round(percent * 100)}%`
+            const angleString = `${p.round(angle)}°`
+            const speedString = `${p.round(percent * 100)}%`
             
             p.fill(0)
             p.textSize(canvasWidthOrHeight * 0.075)
             p.textAlign(p.CENTER, p.CENTER)
             p.noStroke()
 
-            p.text(infoString, position.x, position.y)
+            p.text(angleString, position.x, position.y - p.textLeading())
+            p.text(speedString, position.x, position.y)
         }
 
         const sketchObject = p => {

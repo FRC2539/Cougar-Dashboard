@@ -4,6 +4,7 @@ import Limelight from "./components/limelight"
 import Mechanisms from "./components/mechanisms"
 import Messages from "./components/messages"
 import Robot from "./components/robot"
+import Autos from "./components/autos"
 export default class Home extends Component {
     constructor(props) {
         super(props)
@@ -20,7 +21,7 @@ export default class Home extends Component {
                 </div>
                 <div className="col-span-1 flex flex-col justify-between p-3">
                     <Limelight nt={this.props.nt}/>
-                    <p>Hi</p>
+                    <Autos nt={this.props.nt} putValueNT={this.props.putValueNT}/>
                 </div>
             </div>
         )
