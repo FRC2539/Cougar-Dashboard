@@ -48,5 +48,17 @@ export default {
     "/Unknown Subsystem/Hood Moving":false,
     "/limelight/ledMode":0,
     "/Unknown Subsystem/Hood Position":184.49490161237256,
-    "/Turret/Turret Position":1
+    "/Turret/Turret Position":1,
+    // Added values for testing
+    "/Dashboard/Robot Angle":-15, // General angle of the robot (relative to starting angle)
+    "/Dashboard/Robot Speed":0.9, // General speed
+    "/Dashboard/Wheel Angles":[[30,30],[30,30]], // The angle that each wheel is facing (relative to themselves)
+    "/Dashboard/Wheel Speeds":[[0.9, 0.9], [0.9, 0.9]],
+    "/Dashboard/Messages":[
+        "Test1",
+        "Test2",
+        "Test3",
+        "25",
+        "39!"
+    ]
 }

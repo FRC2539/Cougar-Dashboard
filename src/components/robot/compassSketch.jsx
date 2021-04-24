@@ -4,29 +4,27 @@ import { Component } from "preact"
 export default class CompassSketch extends Component {
     constructor(props) {
         super(props)
-
-        this.networkTables = () => {
-            return this.props.nt
-        }
-
-        // TODO Make the "compass" a vector (arrow) which gets the total direction => (angle and speed) 
     }
 
     componentDidMount() {        
         const sketchElement = document.getElementById('compass-section')
 
-        const networkTables = this.networkTables()
-
         const getGeneralAngle = () => {
-            // TODO replace this information with info from the network tables
+            const generalAngleKey = "/Dashboard/Robot Angle"
+            const defaultValue = 0
 
-            return 15
+            if(!(generalAngleKey in this.props.nt)) return defaultValue
+
+            return this.props.nt[generalAngleKey]
         }
 
         const getSpeedPercent = () => {
-            // TODO replace with info from the network tables
+            const generalSpeedKey = "/Dashboard/Robot Speed"
+            const defaultValue = 1
 
-            return 0.75
+            if(!(generalSpeedKey in this.props.nt)) return defaultValue
+
+            return this.props.nt[generalSpeedKey]
         }
 
         const drawCompassCircle = (p, diameter, circleCenter) => {
@@ -98,7 +96,7 @@ export default class CompassSketch extends Component {
 
                 const infoPosition = p.createVector(p.width / 2, p.height * 1/5)
 
-                drawCompassInfo(p, infoPosition, p.min(p.width, p.height), {angle: p.radians(getGeneralAngle()), speedPercent: getSpeedPercent()})
+                drawCompassInfo(p, infoPosition, p.min(p.width, p.height), {angle: getGeneralAngle(), speedPercent: getSpeedPercent()})
             }
         }
 

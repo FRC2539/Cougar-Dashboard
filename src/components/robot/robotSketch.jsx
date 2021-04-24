@@ -4,33 +4,27 @@ import { Component } from "preact"
 export default class RobotSketch extends Component {
     constructor(props) {
         super(props)
-
-        this.networkTables = () => {
-            return this.props.nt
-        }
-
-        // TODO Change the rectangles for wheels into arrows (vectors) that scale by their speed
-        // TODO Make the "compass" a vector (arrow) which gets the total direction => (angle and speed) 
-        // TODO Make the messages data structure (find out which to use, js arrays or objects for adding to one side and remove from the other)
     }
 
     componentDidMount() {        
         const sketchElement = document.getElementById('robot-section')
 
-        const networkTables = this.networkTables()
-
         const getRobotWheelAngles = () => {
-            // In the future, get this from network tables
+            const robotWheelAnglesKey = "/Dashboard/Wheel Angles"
+            const defaultValue = [[0,0],[0,0]]
 
-            return [[10, 10],
-                    [10, 10]]
+            if(!(robotWheelAnglesKey in this.props.nt)) return defaultValue
+
+            return this.props.nt[robotWheelAnglesKey]
         }
 
         const getRobotWheelSpeeds = () => {
-            // In the future, get this from network tables
+            const robotWheelSpeedsKey = "/Dashboard/Wheel Speeds"
+            const defaultValue = [[0,0],[0,0]]
 
-            return [[0.9, 0.9],
-                    [0.9, 0.9]]
+            if(!(robotWheelSpeedsKey in this.props.nt)) return defaultValue
+
+            return this.props.nt[robotWheelSpeedsKey]
         }
 
         const convertWheelAnglesToP5Angles = (wheelAngles) => {
