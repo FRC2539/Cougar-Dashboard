@@ -1,48 +1,63 @@
 import { Component } from "preact"
+import DebugHeader from "./components/debug-header"
 
 export default class Debug extends Component {
     constructor(props) {
         super(props)
 
-        this.state = {search: ""}
-
-        // this.headings = new Set()
-
-        // for(const [key, value] of Object.entries(this.props.nt)) {
-        //     if(!this.headings.has(this.getHeading(key))) {
-        //         this.headings.put(this.getHeading(key))
-        //     }
-        // }
-
-        // console.log(this.headings)
-    }
-
-    getHeading(key) {
-        let path = key.split("/")
-        return path[1]
-    }
-
-    updateSearch(e) {
-        this.setState({search: e.target.value})
-    }
-
-    mapToHTML() {
-        const sortedNt = Object.entries(this.props.nt).map(([key, value]) => key).sort(this.compareStrings)
-        const filteredNt = sortedNt.filter((key) => key.toLowerCase().includes(this.state.search.toLowerCase()))
-        return filteredNt.map((key) => <p>{key} : <span className="font-bold">{this.props.nt[key]}</span></p>);
-    }
-
-    compareStrings(a, b) {
-        return a > b ? 1 : (b > a ? -1 : 0)
+        this.state = {
+            search: "",
+            data: new Map() // Header => Map(key => value)
+                            // E.g. Autonomous => Map("selectedAuto" => "example")
+        }
     }
 
     render() {
+        // Convert the network tables data to a header-based map
+        const data = this.createDataMap()
+
+        const html = this.dataToHTML(data)
+        
         return (
-            <div className="grid grid-cols-1 gap-y-2 mx-2 mt-3">
-                {/* <img src="http://10.25.39.11:5800" /> */}
-                <input type="text" onInput={this.updateSearch.bind(this)}/>
-                {this.mapToHTML()}
+            <div className="bg-gray h-full py-3">
+                <div className="h-full overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-2">
+                    {html}
+                </div>
             </div>
         )
+    }
+
+    dataToHTML(data) {
+        const html = []
+
+        for(const [key, value] of data) {
+            html.push(<DebugHeader title={key} data={value} />)
+        }
+
+        return html
+    } 
+
+    createDataMap() {
+        const data = new Map()
+
+        for(const [key, value] of Object.entries(this.props.nt)) {
+            const {header, subkey} = this.getHeader(key)
+
+            if(!data.has(header)) data.set(header, new Map())
+
+            const keysMap = data.get(header)
+
+            keysMap.set(subkey, value)
+        }
+
+        return data
+    }
+
+    getHeader(key) {
+        const path = key.split("/")
+        const header = path[1]
+        const subkey = key.slice(header.length + 2) // 2 accounts for the slashes
+
+        return {header, subkey}
     }
 }
