@@ -31,7 +31,7 @@ export default class Debug extends Component {
         const html = []
 
         for(const [key, value] of data) {
-            html.push(<DebugHeader title={key} data={value} />)
+            html.push(<DebugHeader title={key} data={value} putValueNT={this.props.putValueNT} />)
         }
 
         return html
@@ -56,7 +56,7 @@ export default class Debug extends Component {
     getHeader(key) {
         const path = key.split("/")
         const header = path[1]
-        const subkey = key.slice(header.length + 2) // 2 accounts for the slashes
+        const subkey = key.slice(header.length + 2) // `2` here accounts for the slashes
 
         return {header, subkey}
     }

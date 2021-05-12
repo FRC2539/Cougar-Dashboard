@@ -34,7 +34,7 @@ export default class App extends Component {
     render() {
         return (
             // <Home nt={this.state.nt} putValueNT={this.ntInterface.putValue} />
-            <Debug nt={this.state.nt}/>
+            <Debug nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>
         )
     }
 }
