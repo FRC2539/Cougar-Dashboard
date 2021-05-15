@@ -19,7 +19,7 @@ export default class Debug extends Component {
         const html = this.dataToHTML(data)
         
         return (
-            <div className="bg-gray h-full py-3">
+            <div className="bg-gray h-full py-3 px-4">
                 <div className="h-full overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-2">
                     {html}
                 </div>

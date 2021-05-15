@@ -1,15 +1,18 @@
 import "./libraries/networktables.js"
 import { createNetworkTablesInterface } from "./nt-interface.js"
-import testData from "./test.js"
 import { Component } from "preact"
 import Debug from "./debug"
 import Home from "./home"
+import Menu from "./components/menu"
 
 export default class App extends Component {
     constructor() {
         super()
 
-        this.state = {nt: {}}
+        this.state = {
+            nt: {},
+            page: "home"
+        }
 
         this.ntInterface = createNetworkTablesInterface({
             getNetworkTablesState: () => this.getNetworkTablesState(),
@@ -17,6 +20,17 @@ export default class App extends Component {
             usingTestData: true,
             blacklist: ["LiveWindow"]
         })
+
+        this.pages = [
+            "home",
+            "debug"
+        ]
+    }
+
+    setPage(page) {
+        if(!this.pages.includes(page)) return
+
+        this.setState({page})
     }
 
     getNetworkTablesState() {
@@ -33,8 +47,15 @@ export default class App extends Component {
 
     render() {
         return (
-            // <Home nt={this.state.nt} putValueNT={this.ntInterface.putValue} />
-            <Debug nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>
+            <div className="relative">
+                {
+                    {
+                        "home": <Home nt={this.state.nt} putValueNT={this.ntInterface.putValue} />,
+                        "debug": <Debug nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>
+                    }[this.state.page]
+                }
+                <Menu currentPage={this.state.page} pages={this.pages} setPage={(page) => this.setPage(page)}/>
+            </div>
         )
     }
 }

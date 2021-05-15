@@ -30,7 +30,7 @@ export default class DebugInput extends Component {
 
     render() {
         return (
-            <input type={this.props.type} className="px-1 py-0 rounded-sm border-black bg-orange" onInput={(e) => this.updateValue(e.target.value)} onChange={() => this.updateNT()} value={this.state.value}/>
+            <input style={{width: "130px"}} type={this.props.type} className="px-1 py-0 rounded-sm border-black bg-orange" onInput={(e) => this.updateValue(e.target.value)} onChange={() => this.updateNT()} value={this.state.value}/>
         )
     }
 }

@@ -31,7 +31,7 @@ export default class DebugObject extends Component {
         const json = JSON.stringify(this.state.value)
 
         return (
-            <input type="text" className="px-1 py-0 rounded-sm border-black bg-orange" onInput={(e) => this.updateValue(e.target.value)} onChange={() => this.updateNT()} value={json}/>
+            <input style={{width: "130px"}} type="text" className="px-1 py-0 rounded-sm border-black bg-orange" onInput={(e) => this.updateValue(e.target.value)} onChange={() => this.updateNT()} value={json}/>
         )
     }
 }
