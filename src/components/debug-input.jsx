@@ -8,8 +8,11 @@ export default class DebugInput extends Component {
         super(props)
 
         this.state = {
-            value: this.props.value
+            value: this.props.value()
         }
+
+        // TODO: Make data update live. Basically, store the last value in the state, and rerender if the values change. 
+        // Actually, pass the title and key in and then have the value update from that rather than using a passed value.
     }
 
     updateValue(newValue) {
@@ -23,7 +26,7 @@ export default class DebugInput extends Component {
         if(this.state.value == "") return
 
         // Prevent setting a number input to normal text
-        if(this.props.type == "number" && typeof parseInt(this.state.value) != "number")
+        if(this.props.type == "number" && typeof parseInt(this.state.value) != "number") return
 
         this.props.putValueNT(this.props.ntkey, this.state.value)
     }

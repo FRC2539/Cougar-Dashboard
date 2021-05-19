@@ -25,30 +25,32 @@ export default class DebugHeader extends Component {
         const infoHTML = []
 
         // Generate the text for each value in the data
-        for(const [key, value] of data) {
+        for(const [key, value] of data()) {
             const ntkey = `/${title}/${key}`
 
             const commonClasses = "mb-1 w-full flex flex-row justify-between flex-wrap"
 
+            const getValue = () => this.props.ntMap.get(title).get(key)
+
             switch(typeof value) {
                 case "string": {
-                    infoHTML.push(<p className={commonClasses}>{key}: <DebugInput type={"text"} value={value} ntkey={ntkey} putValueNT={this.props.putValueNT}/></p>)
+                    infoHTML.push(<p className={commonClasses}>{key}: <DebugInput type={"text"} value={getValue} ntkey={ntkey} putValueNT={this.props.putValueNT} ntMap={this.props.ntMap}/></p>)
                     break
                 }
                 case "number": {
-                    infoHTML.push(<p className={commonClasses}>{key}: <DebugInput type={"number"} value={value} ntkey={ntkey} putValueNT={this.props.putValueNT}/></p>)
+                    infoHTML.push(<p className={commonClasses}>{key}: <DebugInput type={"number"} value={getValue} ntkey={ntkey} putValueNT={this.props.putValueNT} ntMap={this.props.ntMap}/></p>)
                     break
                 }
                 case "boolean": {
-                    infoHTML.push(<p className={commonClasses}>{key}: <DebugCheckbox value={value} ntkey={ntkey} putValueNT={this.props.putValueNT}/></p>)
+                    infoHTML.push(<p className={commonClasses}>{key}: <DebugCheckbox value={getValue} ntkey={ntkey} putValueNT={this.props.putValueNT} ntMap={this.props.ntMap}/></p>)
                     break
                 }
                 case "object": {
-                    infoHTML.push(<p className={commonClasses}>{key}: <DebugObject value={value} ntkey={ntkey} putValueNT={this.props.putValueNT}/></p>)
+                    infoHTML.push(<p className={commonClasses}>{key}: <DebugObject value={getValue} ntkey={ntkey} putValueNT={this.props.putValueNT} ntMap={this.props.ntMap}/></p>)
                     break
                 }
                 default: {
-                    infoHTML.push(<p className={commonClasses}>{key}: {JSON.stringify(value)}</p>)
+                    infoHTML.push(<p className={commonClasses}>{key}: {JSON.stringify(this.props.ntMap.get(title).get(key))}</p>)
                     break
                 }
             }

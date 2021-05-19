@@ -7,20 +7,23 @@ export default class Debug extends Component {
 
         this.state = {
             search: "",
-            data: new Map() // Header => Map(key => value)
+            // data: new Map() // Header => Map(key => value)
                             // E.g. Autonomous => Map("selectedAuto" => "example")
         }
     }
 
     render() {
         // Convert the network tables data to a header-based map
-        const data = this.createDataMap()
+        // const data = this.createDataMap()
 
-        const html = this.dataToHTML(data)
+
+        // Current plan: check if the current data is equal. If so, don't do anything. If not, update.
+
+        const html = this.dataToHTML(this.props.ntMap)
         
         return (
             <div className="bg-gray h-full py-3 px-4">
-                <div className="h-full overflow-y-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-2">
+                <div className="h-full overflow-y-auto overflow-x-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-2">
                     {html}
                 </div>
             </div>
@@ -30,34 +33,34 @@ export default class Debug extends Component {
     dataToHTML(data) {
         const html = []
 
-        for(const [key, value] of data) {
-            html.push(<DebugHeader title={key} data={value} putValueNT={this.props.putValueNT} />)
+        for(const [key, _] of data) {
+            html.push(<DebugHeader ntMap={this.props.ntMap} title={key} data={() => this.props.ntMap.get(key)} putValueNT={this.props.putValueNT} />)
         }
 
         return html
     } 
 
-    createDataMap() {
-        const data = new Map()
+    // createDataMap() {
+    //     const data = new Map()
 
-        for(const [key, value] of Object.entries(this.props.nt)) {
-            const {header, subkey} = this.getHeader(key)
+    //     for(const [key, value] of Object.entries(this.props.nt)) {
+    //         const {header, subkey} = this.getHeader(key)
 
-            if(!data.has(header)) data.set(header, new Map())
+    //         if(!data.has(header)) data.set(header, new Map())
 
-            const keysMap = data.get(header)
+    //         const keysMap = data.get(header)
 
-            keysMap.set(subkey, value)
-        }
+    //         keysMap.set(subkey, value)
+    //     }
 
-        return data
-    }
+    //     return data
+    // }
 
-    getHeader(key) {
-        const path = key.split("/")
-        const header = path[1]
-        const subkey = key.slice(header.length + 2) // `2` here accounts for the slashes
+    // getHeader(key) {
+    //     const path = key.split("/")
+    //     const header = path[1]
+    //     const subkey = key.slice(header.length + 2) // `2` here accounts for the slashes
 
-        return {header, subkey}
-    }
+    //     return {header, subkey}
+    // }
 }

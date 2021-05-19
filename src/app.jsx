@@ -11,13 +11,16 @@ export default class App extends Component {
 
         this.state = {
             nt: {},
+            ntMap: new Map(),
             page: "home"
         }
 
         this.ntInterface = createNetworkTablesInterface({
             getNetworkTablesState: () => this.getNetworkTablesState(),
             setNetworkTablesState: (nt) => this.setNetworkTablesState(nt),
-            usingTestData: true,
+            getNTMapState: () => this.getNTMapState(),
+            setNTMapState: (ntMap) => this.setNTMapState(ntMap),
+            usingTestData: false,
             blacklist: ["LiveWindow"]
         })
 
@@ -41,6 +44,14 @@ export default class App extends Component {
         this.setState({nt})
     }
 
+    getNTMapState() {
+        return this.state.ntMap
+    }
+
+    setNTMapState(ntMap) {
+        this.setState({ntMap})
+    }
+
     componentDidMount() {
         this.ntInterface.initialize()
     }
@@ -51,7 +62,7 @@ export default class App extends Component {
                 {
                     {
                         "home": <Home nt={this.state.nt} putValueNT={this.ntInterface.putValue} />,
-                        "debug": <Debug nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>
+                        "debug": <Debug ntMap={this.state.ntMap} putValueNT={this.ntInterface.putValue}/>
                     }[this.state.page]
                 }
                 <Menu currentPage={this.state.page} pages={this.pages} setPage={(page) => this.setPage(page)}/>

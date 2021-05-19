@@ -27,13 +27,14 @@ export default class Autos extends Component {
         if(this.props.nt == null || this.props.nt[this.autos] == null) return <span></span> 
         
         return this.props.nt[this.autos].map((value, i) => {
-            return <a onClick={() => this.setCurrentAuto(value)} class={this.getButtonColorClass(value) + " cursor-pointer p-2 text-center border border-gray " + this.getBorderRadiusClass(this.props.nt[this.autos], i)}>{value}</a>
+            return <a onClick={() => this.setCurrentAuto(value)} class={this.getButtonColorClass(value) + " cursor-pointer p-2 text-center text-sm border border-gray break-all flex justify-center items-center " + this.getBorderRadiusClass(this.props.nt[this.autos], i)}><p>{value}</p></a>
         })
     }
 
     render() {
         return (
-            <div class="grid grid-flow-auto">
+            // <div class="grid grid-flow-auto">
+            <div class="grid grid-cols-3">
                 {this.getButtonHTML()}
             </div>
         )

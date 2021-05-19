@@ -2,7 +2,7 @@ import "./libraries/networktables.js"
 import testData from "./test.js"
 
 export const createNetworkTablesInterface = (
-    {getNetworkTablesState, setNetworkTablesState, usingTestData, blacklist}) => {
+    {getNetworkTablesState, setNetworkTablesState, setNTMapState, getNTMapState, usingTestData, blacklist}) => {
 
     const keyIsBlacklisted = (key) => key in blacklist
 
@@ -18,6 +18,48 @@ export const createNetworkTablesInterface = (
         setNetworkTablesState(nt)
     }
 
+    const getHeader = (key) => {
+        const path = key.split("/")
+        const header = path[1]
+        const subkey = key.slice(header.length + 2) // `2` here accounts for the slashes
+
+        return {header, subkey}
+    }
+
+    const populateNTMapFromKeys = (keys) => {
+        const data = new Map()
+
+        for(const key of keys) {
+            const {header, subkey} = getHeader(key)
+
+            if(!data.has(header)) data.set(header, new Map())
+
+            const keysMap = data.get(header)
+
+            const keyValue = NetworkTables.getValue(key)
+
+            keysMap.set(subkey, keyValue)
+        }
+
+        setNTMapState(data)
+    }
+
+    const setNTMapKey = (key, value) => {
+        if(keyIsBlacklisted(key)) return 
+
+        const data = getNTMapState()
+
+        const {header, subkey} = getHeader(key)
+
+        if(!data.has(header)) data.set(header, new Map())
+
+        const keysMap = data.get(header)
+
+        keysMap.set(subkey, value)
+
+        setNTMapState(data)
+    }
+
     const setStateKey = (key, value) => {
         if(keyIsBlacklisted(key)) return 
 
@@ -28,16 +70,22 @@ export const createNetworkTablesInterface = (
         setNetworkTablesState(nt)
     }
 
+    const setKey = (key, value) => {
+        setNTMapKey(key, value)
+        setStateKey(key, value)
+    }
+
     const putValue = (key, value) => {
         if(keyIsBlacklisted(key)) return
 
         if(usingTestData) {
-            setStateKey(key, value)
+            setKey(key, value)
 
             return
         }
 
         NetworkTables.putValue(key, value) 
+
     }
 
     const initializeTestData = () => setNetworkTablesState(testData)
@@ -54,11 +102,14 @@ export const createNetworkTablesInterface = (
 
             if(!connected) return 
 
-            populateNetworkTableFromKeys(NetworkTables.getKeys())
+            const keys = NetworkTables.getKeys()
+
+            populateNetworkTableFromKeys(keys)
+            populateNTMapFromKeys(keys)
         }, true)
 
         NetworkTables.addGlobalListener((key, value, _) => {
-            setStateKey(key, value)
+            setKey(key, value)
         }, true)
     }
 

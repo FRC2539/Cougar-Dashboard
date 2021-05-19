@@ -32,11 +32,18 @@ export default class Menu extends Component {
                     </a>
                     <ul className="unstyled-list color-white">
                         {pages.map(page => {
-                            return <li><a className={"cursor-pointer " + (currentPage == page ? "font-bold" : "font-normal")} onClick={() => setPage(page)}>{page}</a></li>
+                            return <li><a className={"cursor-pointer " + (currentPage == page ? "font-bold" : "font-normal")} onClick={() => setPage(page)}>{this.capitalize(page)}</a></li>
                         })}
                     </ul>
                 </div>
             </div>
         )
+    }
+
+    capitalize(string) {
+        const wordArray = string.split(" ")
+        const capitalizedArray = wordArray.map(word => word.slice(0, 1).toUpperCase() + word.slice(1))
+
+        return capitalizedArray.join(" ")
     }
 }

@@ -8,7 +8,7 @@ export default class DebugObject extends Component {
         super(props)
 
         this.state = {
-            value: this.props.value
+            value: this.props.value()
         }
     }
 

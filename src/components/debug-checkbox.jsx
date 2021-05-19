@@ -8,7 +8,7 @@ export default class DebugCheckbox extends Component {
         super(props)
 
         this.state = {
-            value: this.props.value
+            value: this.props.value()
         }
     }
 
