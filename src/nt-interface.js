@@ -1,6 +1,17 @@
 import "./libraries/networktables.js"
 import testData from "./test.js"
 
+// Memory problem hypotheses
+// It could be that I am using a map, and the map is trying to rerender stuff and its mutable so it is passed around everywhere.
+// Good to test if only creating an initial map is a better idea
+// Fix that next time.
+
+// Shawn's suggestion
+// Hinder the speed of updates from the limelight
+// It goes too fast
+// Like slow it down
+// The nt update event is called really fast, so just limit it to milliseconds.
+
 export const createNetworkTablesInterface = (
     {getNetworkTablesState, setNetworkTablesState, setNTMapState, getNTMapState, usingTestData, blacklist}) => {
 
@@ -42,6 +53,22 @@ export const createNetworkTablesInterface = (
         }
 
         setNTMapState(data)
+    }
+
+    const createTestNTMap = (testData) => {
+        const data = new Map()
+
+        for(const [key, value] of Object.entries(testData)) {
+            const {header, subkey} = getHeader(key)
+
+            if(!data.has(header)) data.set(header, new Map())
+
+            const keysMap = data.get(header)
+
+            keysMap.set(subkey, value)
+        }
+
+        return data
     }
 
     const setNTMapKey = (key, value) => {
@@ -88,7 +115,13 @@ export const createNetworkTablesInterface = (
 
     }
 
-    const initializeTestData = () => setNetworkTablesState(testData)
+    const initializeTestData = () => {
+        setNetworkTablesState(testData)
+
+        const testMap = createTestNTMap(testData)
+
+        setNTMapState(testMap)
+    }
     
     const initializeNetworkTables = () => {
         NetworkTables.addWsConnectionListener((connected) => {

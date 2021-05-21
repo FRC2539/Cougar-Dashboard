@@ -33,8 +33,8 @@ export default class Debug extends Component {
     dataToHTML(data) {
         const html = []
 
-        for(const [key, _] of data) {
-            html.push(<DebugHeader ntMap={this.props.ntMap} title={key} data={() => this.props.ntMap.get(key)} putValueNT={this.props.putValueNT} />)
+        for(const [key, value] of data) {
+            html.push(<DebugHeader ntMap={this.props.ntMap} nt={this.props.nt} title={key} data={value} putValueNT={this.props.putValueNT} />)
         }
 
         return html

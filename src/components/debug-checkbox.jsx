@@ -8,7 +8,7 @@ export default class DebugCheckbox extends Component {
         super(props)
 
         this.state = {
-            value: this.props.value()
+            value: this.props.value
         }
     }
 
@@ -18,6 +18,12 @@ export default class DebugCheckbox extends Component {
 
     updateNT() {
         this.props.putValueNT(this.props.ntkey, this.state.value)
+    }
+
+    shouldComponentUpdate(nextProps) {
+        const propsValuesHaveChanged = this.props.nt[this.props.ntkey] != nextProps.nt[this.props.ntkey]
+
+        if(propsValuesHaveChanged) this.updateValue(nextProps.nt[this.props.ntkey])
     }
 
     render() {

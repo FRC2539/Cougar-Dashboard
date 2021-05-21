@@ -8,7 +8,7 @@ export default class DebugInput extends Component {
         super(props)
 
         this.state = {
-            value: this.props.value()
+            value: this.props.value
         }
 
         // TODO: Make data update live. Basically, store the last value in the state, and rerender if the values change. 
@@ -29,6 +29,12 @@ export default class DebugInput extends Component {
         if(this.props.type == "number" && typeof parseInt(this.state.value) != "number") return
 
         this.props.putValueNT(this.props.ntkey, this.state.value)
+    }
+
+    shouldComponentUpdate(nextProps) {
+        const propsValuesHaveChanged = this.props.nt[this.props.ntkey] != nextProps.nt[this.props.ntkey]
+
+        if(propsValuesHaveChanged) this.updateValue(nextProps.nt[this.props.ntkey])
     }
 
     render() {

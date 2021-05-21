@@ -62,7 +62,7 @@ export default class App extends Component {
                 {
                     {
                         "home": <Home nt={this.state.nt} putValueNT={this.ntInterface.putValue} />,
-                        "debug": <Debug ntMap={this.state.ntMap} putValueNT={this.ntInterface.putValue}/>
+                        "debug": <Debug ntMap={this.state.ntMap} nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>
                     }[this.state.page]
                 }
                 <Menu currentPage={this.state.page} pages={this.pages} setPage={(page) => this.setPage(page)}/>

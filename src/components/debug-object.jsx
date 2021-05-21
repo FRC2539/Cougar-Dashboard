@@ -8,7 +8,7 @@ export default class DebugObject extends Component {
         super(props)
 
         this.state = {
-            value: this.props.value()
+            value: this.props.value
         }
     }
 
@@ -21,6 +21,12 @@ export default class DebugObject extends Component {
         } catch (e) {
             return
         }
+    }
+
+    shouldComponentUpdate(nextProps) {
+        const propsValuesHaveChanged = JSON.stringify(this.props.nt[this.props.ntkey]) != JSON.stringify(nextProps.nt[this.props.ntkey])
+
+        if(propsValuesHaveChanged) this.updateValue(nextProps.nt[this.props.ntkey])
     }
 
     updateNT() {
