@@ -4,7 +4,7 @@ export default class Messages extends Component {
     constructor(props) {
         super(props)
 
-        this.messagesKey = "/Dashboard/Messages"
+        this.messagesKey = "/MessagingSystem/messages"
     }
 
     render() {

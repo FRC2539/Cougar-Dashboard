@@ -60,7 +60,7 @@ export default class DebugHeader extends Component {
             <div className="bg-orange p-2 mx-2 shadow rounded-lg">
                 <a onClick={() => this.toggleCollapse()} className="text-xl cursor-pointer"><strong>{title}</strong></a>
                 <div className={this.state.collapsed ? "hidden" : "block"}>
-                    {infoHTML}
+                    {this.state.collapsed ? "" : infoHTML}
                 </div>
             </div>
         )

@@ -1,17 +1,6 @@
 import "./libraries/networktables.js"
 import testData from "./test.js"
 
-// Memory problem hypotheses
-// It could be that I am using a map, and the map is trying to rerender stuff and its mutable so it is passed around everywhere.
-// Good to test if only creating an initial map is a better idea
-// Fix that next time.
-
-// Shawn's suggestion
-// Hinder the speed of updates from the limelight
-// It goes too fast
-// Like slow it down
-// The nt update event is called really fast, so just limit it to milliseconds.
-
 export const createNetworkTablesInterface = (
     {getNetworkTablesState, setNetworkTablesState, setNTMapState, getNTMapState, usingTestData, blacklist}) => {
 
@@ -41,6 +30,8 @@ export const createNetworkTablesInterface = (
         const data = new Map()
 
         for(const key of keys) {
+            if(keyIsBlacklisted(key)) continue
+
             const {header, subkey} = getHeader(key)
 
             if(!data.has(header)) data.set(header, new Map())
@@ -48,6 +39,7 @@ export const createNetworkTablesInterface = (
             const keysMap = data.get(header)
 
             const keyValue = NetworkTables.getValue(key)
+
 
             keysMap.set(subkey, keyValue)
         }
@@ -98,7 +90,6 @@ export const createNetworkTablesInterface = (
     }
 
     const setKey = (key, value) => {
-        setNTMapKey(key, value)
         setStateKey(key, value)
     }
 
@@ -123,6 +114,8 @@ export const createNetworkTablesInterface = (
         setNTMapState(testMap)
     }
     
+    const keys = () => NetworkTables.getKeys()
+    
     const initializeNetworkTables = () => {
         NetworkTables.addWsConnectionListener((connected) => {
             console.log("Websocket connected: " + connected)
@@ -133,17 +126,22 @@ export const createNetworkTablesInterface = (
         NetworkTables.addRobotConnectionListener((connected) => {
             console.log("Robot connected: " + connected)
 
-            if(!connected) return 
+            if(!connected) return
 
-            const keys = NetworkTables.getKeys()
-
-            populateNetworkTableFromKeys(keys)
-            populateNTMapFromKeys(keys)
+            populateNetworkTableFromKeys(keys())
+            populateNTMapFromKeys(keys())
         }, true)
 
-        NetworkTables.addGlobalListener((key, value, _) => {
-            setKey(key, value)
-        }, true)
+        // Synchronously update the local network tables data
+        // Note: The rate of async updates from the robot causes a memory leak
+        setInterval(() => {
+            populateNetworkTableFromKeys(keys())
+        }, 500) // Update every 100 milliseconds
+
+        // Next time
+        // Fix the inputs on debug page
+        // Play around with the populate nt method
+            // That means seeing if it can run faster, etc, etc
     }
 
     const useNetworkTables = () => {

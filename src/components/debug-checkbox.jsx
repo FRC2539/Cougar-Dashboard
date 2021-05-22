@@ -20,10 +20,13 @@ export default class DebugCheckbox extends Component {
         this.props.putValueNT(this.props.ntkey, this.state.value)
     }
 
-    shouldComponentUpdate(nextProps) {
+    shouldComponentUpdate(nextProps, nextState) {
         const propsValuesHaveChanged = this.props.nt[this.props.ntkey] != nextProps.nt[this.props.ntkey]
+        const stateIsBeingUpdated = this.state.value != nextState.value
+        
+        const stateIsDifferentFromProps = this.state.value != nextProps.nt[this.props.ntkey]
 
-        if(propsValuesHaveChanged) this.updateValue(nextProps.nt[this.props.ntkey])
+        if((propsValuesHaveChanged || stateIsDifferentFromProps) && !stateIsBeingUpdated) this.updateValue(nextProps.nt[this.props.ntkey])
     }
 
     render() {

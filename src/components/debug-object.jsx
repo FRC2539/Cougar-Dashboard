@@ -23,10 +23,14 @@ export default class DebugObject extends Component {
         }
     }
 
-    shouldComponentUpdate(nextProps) {
+    shouldComponentUpdate(nextProps, nextState) {
         const propsValuesHaveChanged = JSON.stringify(this.props.nt[this.props.ntkey]) != JSON.stringify(nextProps.nt[this.props.ntkey])
+        const stateIsBeingUpdated = JSON.stringify(this.state.value) != JSON.stringify(nextState.value)
+        
+        const stateIsDifferentFromProps = JSON.stringify(this.state.value) != JSON.stringify(nextProps.nt[this.props.ntkey])
 
-        if(propsValuesHaveChanged) this.updateValue(nextProps.nt[this.props.ntkey])
+
+        if((propsValuesHaveChanged || stateIsDifferentFromProps) && !stateIsBeingUpdated) this.updateValue(JSON.stringify(nextProps.nt[this.props.ntkey]))
     }
 
     updateNT() {

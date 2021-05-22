@@ -15,7 +15,7 @@ export default class Home extends Component {
             <div className="grid grid-cols-3 w-full h-full bg-gray text-black">
                 <div className="max-h-full col-span-2 grid grid-rows-7 grid-cols-6 p-3">
                     <Messages nt={this.props.nt} />
-                    <Robot nt={this.props.nt} />
+                    <Robot nt={this.props.nt} /> 
                     <div className="mt-1 col-span-2 row-span-2 bg-team-logo bg-center bg-contain bg-no-repeat"></div>
                     <Mechanisms nt={this.props.nt} />
                 </div>

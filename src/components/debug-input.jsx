@@ -10,9 +10,6 @@ export default class DebugInput extends Component {
         this.state = {
             value: this.props.value
         }
-
-        // TODO: Make data update live. Basically, store the last value in the state, and rerender if the values change. 
-        // Actually, pass the title and key in and then have the value update from that rather than using a passed value.
     }
 
     updateValue(newValue) {
@@ -31,10 +28,19 @@ export default class DebugInput extends Component {
         this.props.putValueNT(this.props.ntkey, this.state.value)
     }
 
-    shouldComponentUpdate(nextProps) {
-        const propsValuesHaveChanged = this.props.nt[this.props.ntkey] != nextProps.nt[this.props.ntkey]
+    shouldComponentUpdate(nextProps, nextState) {
+        // Problem!
+        // Basically, you can't change the text in the input without it immediately changing it back.
+        // Notes: Stateisbeingupdated returns true before state is changed, and false after.
+        // That means it returns false the iteration before it needs to
+        // Not sure what the solution. Might need to play around with the logic.
 
-        if(propsValuesHaveChanged) this.updateValue(nextProps.nt[this.props.ntkey])
+        const propsValuesHaveChanged = this.props.nt[this.props.ntkey] != nextProps.nt[this.props.ntkey]
+        const stateIsBeingUpdated = this.state.value != nextState.value
+        
+        const stateIsDifferentFromProps = this.state.value != nextProps.nt[this.props.ntkey]
+
+        if((propsValuesHaveChanged || stateIsDifferentFromProps) && !stateIsBeingUpdated) this.updateValue(nextProps.nt[this.props.ntkey])
     }
 
     render() {
