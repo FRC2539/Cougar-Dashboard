@@ -4,18 +4,25 @@ import testData from "./test.js"
 export const createNetworkTablesInterface = (
     {getNetworkTablesState, setNetworkTablesState, setNTMapState, getNTMapState, usingTestData, blacklist}) => {
 
-    const keyIsBlacklisted = (key) => key in blacklist
+    let tempNT = {}
+
+    const keyIsBlacklisted = (key) => blacklist.includes(key)
+
+    const setNetworkTables = (nt) => tempNT = nt
+    const getNetworkTables = () => tempNT
 
     const populateNetworkTableFromKeys = (keys) => {
         const nt = {}
 
         for(const key of keys) {
-            if(keyIsBlacklisted(key)) continue
+            const {header, _} = getHeader(key)
+
+            if(keyIsBlacklisted(header)) continue
             
             nt[key] = NetworkTables.getValue(key)
         }
 
-        setNetworkTablesState(nt)
+        setNetworkTables(nt)
     }
 
     const getHeader = (key) => {
@@ -30,9 +37,9 @@ export const createNetworkTablesInterface = (
         const data = new Map()
 
         for(const key of keys) {
-            if(keyIsBlacklisted(key)) continue
-
             const {header, subkey} = getHeader(key)
+
+            if(keyIsBlacklisted(header)) continue
 
             if(!data.has(header)) data.set(header, new Map())
 
@@ -80,21 +87,25 @@ export const createNetworkTablesInterface = (
     }
 
     const setStateKey = (key, value) => {
-        if(keyIsBlacklisted(key)) return 
-
-        const nt = getNetworkTablesState()
+        const nt = getNetworkTables()
 
         nt[key] = value
 
-        setNetworkTablesState(nt)
+        setNetworkTables(nt)
     }
 
     const setKey = (key, value) => {
+        const {header, _} = getHeader(key)
+
+        if(keyIsBlacklisted(header)) return 
+
         setStateKey(key, value)
     }
 
     const putValue = (key, value) => {
-        if(keyIsBlacklisted(key)) return
+        const {header, _} = getHeader(key)
+
+        if(keyIsBlacklisted(header)) return 
 
         if(usingTestData) {
             setKey(key, value)
@@ -107,7 +118,7 @@ export const createNetworkTablesInterface = (
     }
 
     const initializeTestData = () => {
-        setNetworkTablesState(testData)
+        setNetworkTables(testData)
 
         const testMap = createTestNTMap(testData)
 
@@ -132,16 +143,22 @@ export const createNetworkTablesInterface = (
             populateNTMapFromKeys(keys())
         }, true)
 
-        // Synchronously update the local network tables data
-        // Note: The rate of async updates from the robot causes a memory leak
+        // Update the local network table every time the network tables changes
+        NetworkTables.addGlobalListener((key, value) => {
+            setKey(key, value)
+        }, true)
+        
+        // Update the stateful network tables object every 250 ms
         setInterval(() => {
-            populateNetworkTableFromKeys(keys())
-        }, 500) // Update every 100 milliseconds
+            const lastState = getNetworkTablesState()
 
-        // Next time
-        // Fix the inputs on debug page
-        // Play around with the populate nt method
-            // That means seeing if it can run faster, etc, etc
+            setNetworkTablesState(tempNT)
+
+            // Update the debugging page map if keys are added or removed
+            if(Object.keys(lastState).length != Object.keys(tempNT).length) {
+                populateNTMapFromKeys(keys())
+            }
+        }, 250) 
     }
 
     const useNetworkTables = () => {
@@ -162,7 +179,7 @@ export const createNetworkTablesInterface = (
     }
 
     const getJSON = () => {
-        return JSON.stringify(getNetworkTablesState())
+        return JSON.stringify(getNetworkTables())
     }
     
     return { initialize, putValue, useTestData, useNetworkTables, getJSON }
