@@ -10,21 +10,25 @@ export default class CompassSketch extends Component {
         const sketchElement = document.getElementById('compass-section')
 
         const getGeneralAngle = () => {
-            const generalAngleKey = "/Dashboard/Robot Angle"
+            const generalAngleKey = "/Swerve Drive/robotVector"
             const defaultValue = 0
 
             if(!(generalAngleKey in this.props.nt)) return defaultValue
 
-            return this.props.nt[generalAngleKey]
+            const angle = this.props.nt[generalAngleKey][1]
+
+            return angle
         }
 
         const getSpeedPercent = () => {
-            const generalSpeedKey = "/Dashboard/Robot Speed"
+            const generalSpeedKey = "/Swerve Drive/joystickPercent"
             const defaultValue = 1
 
             if(!(generalSpeedKey in this.props.nt)) return defaultValue
 
-            return this.props.nt[generalSpeedKey]
+            const speed = this.props.nt[generalSpeedKey]
+
+            return speed
         }
 
         const drawCompassCircle = (p, diameter, circleCenter) => {
@@ -38,7 +42,7 @@ export default class CompassSketch extends Component {
             const percent = p.constrain(speedPercent, 0, 1)
             const arrowTriangleWidth = radius * 0.1
 
-            const arrowLength = radius * percent - 1 // -1 to accomodate for the stroke
+            const arrowLength = (radius * percent) - 1 // -1 to accomodate for the stroke
             
             p.fill(0)
             p.stroke(0)

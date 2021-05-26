@@ -10,8 +10,8 @@ export default class RobotSketch extends Component {
         const sketchElement = document.getElementById('robot-section')
 
         const getRobotWheelAngles = () => {
-            const robotWheelAnglesKey = "/Dashboard/Wheel Angles"
-            const defaultValue = [[0,0],[0,0]]
+            const robotWheelAnglesKey = "/Swerve Drive/wheelAngles"
+            const defaultValue = [0,0,0,0] // Forward is 180 degrees
 
             if(!(robotWheelAnglesKey in this.props.nt)) return defaultValue
 
@@ -19,18 +19,27 @@ export default class RobotSketch extends Component {
         }
 
         const getRobotWheelSpeeds = () => {
-            const robotWheelSpeedsKey = "/Dashboard/Wheel Speeds"
-            const defaultValue = [[0,0],[0,0]]
+            const robotWheelSpeedsKey = "/Swerve Drive/wheelSpeeds"
+            const defaultValue = [0,0,0,0] // Speeds in feet per seconds
 
             if(!(robotWheelSpeedsKey in this.props.nt)) return defaultValue
 
             return this.props.nt[robotWheelSpeedsKey]
         }
 
+        const getRobotWheelPercents = () => {
+            const robotWheelPercentsKey = "/Swerve Drive/wheelPercents"
+            const defaultValue = [0,0,0,0] // Speeds in feet per seconds
+
+            if(!(robotWheelPercentsKey in this.props.nt)) return defaultValue
+
+            return this.props.nt[robotWheelPercentsKey]
+        }
+
         const convertWheelAnglesToP5Angles = (wheelAngles) => {
             const degreesToRadians = (angleInDegrees) => (Math.PI * angleInDegrees) / 180
 
-            return wheelAngles.map(wheels => wheels.map(wheel => degreesToRadians(wheel)))
+            return wheelAngles.map(wheel => degreesToRadians(wheel))
         }
 
         const wheelPositionsOnSketch = ({robotSideWidth, robotPosition}) => {
@@ -73,18 +82,15 @@ export default class RobotSketch extends Component {
             return { tl, tr, bl, br }
         }
 
-        const drawWheels = ({angles, p, robotPosition, robotSideWidth, speedPercent = 1}) => {
-            // Maybe make this a method to get the wheel dimensions
-
-            const percent = p.constrain(speedPercent, 0, 1) // Note: only one speed for all the wheels
-
-            const wheelHeight = 0.22 * robotSideWidth * percent
+        const drawWheels = ({angles, p, robotPosition, robotSideWidth, speedPercents = [0,0,0,0]}) => {
             const wheelWidth = 0.02 * robotSideWidth
             const arrowTriangleWidth = 0.04 * robotSideWidth
 
             const wheelPositions = wheelPositionsOnSketch({robotPosition, robotSideWidth})
 
-            const drawWheel = (position, angle) => {
+            const drawWheel = (position, angle, percent) => {
+                const wheelHeight = 0.22 * robotSideWidth * percent
+
                 p.fill(0)
                 p.noStroke()
 
@@ -105,16 +111,16 @@ export default class RobotSketch extends Component {
             }
 
             // Draw top left wheel
-            drawWheel(wheelPositions.tl(), angles[0][0])
+            drawWheel(wheelPositions.tl(), angles[0], speedPercents[0])
 
             // Draw top right wheel
-            drawWheel(wheelPositions.tr(), angles[0][1])
+            drawWheel(wheelPositions.tr(), angles[1], speedPercents[1])
 
             // Draw bottom left wheel
-            drawWheel(wheelPositions.bl(), angles[1][0])
+            drawWheel(wheelPositions.bl(), angles[2], speedPercents[2])
 
             // Draw bottom right wheel
-            drawWheel(wheelPositions.br(), angles[1][1])
+            drawWheel(wheelPositions.br(), angles[3], speedPercents[3])
         }
 
         const wheelInfoPositionsOnSketch = ({robotSideWidth, robotPosition}) => {
@@ -165,8 +171,8 @@ export default class RobotSketch extends Component {
             const wheelInfoPositions = wheelInfoPositionsOnSketch({robotSideWidth, robotPosition})
 
             const getWheelInfoStrings = (angle, speed) => {
-                const angleString = `${p.round(angle, 2)}°`
-                const speedString = `${p.round(speed * 100, 2)}%`
+                const angleString = `${p.round(angle)}°`
+                const speedString = `${p.round(speed, 1)}`
 
                 return {angleString, speedString}
             } 
@@ -193,7 +199,7 @@ export default class RobotSketch extends Component {
             // TODO make similar blocks of code loop through arrays with the indices needed rather than repeat code
             // Draw top left info
             { // Start a new scope for constants
-                const {angleString, speedString} = getWheelInfoStrings(angles[0][0], speeds[0][0])
+                const {angleString, speedString} = getWheelInfoStrings(angles[0], speeds[0])
                 const wheelInfoWidth = getWheelInfoWidth({angleString, speedString})
                 const topLeftPosition = wheelInfoPositions.tl(wheelInfoWidth)
 
@@ -202,7 +208,7 @@ export default class RobotSketch extends Component {
 
             // Draw top right info
             {
-                const {angleString, speedString} = getWheelInfoStrings(angles[0][1], speeds[0][1])
+                const {angleString, speedString} = getWheelInfoStrings(angles[1], speeds[1])
                 const topRightPosition = wheelInfoPositions.tr()
 
                 drawWheelInfo({position: topRightPosition, angleString, speedString})
@@ -210,7 +216,7 @@ export default class RobotSketch extends Component {
 
             // Draw bottom left info
             {
-                const {angleString, speedString} = getWheelInfoStrings(angles[1][0], speeds[1][0])
+                const {angleString, speedString} = getWheelInfoStrings(angles[2], speeds[2])
                 const wheelInfoWidth = getWheelInfoWidth({angleString, speedString})
                 const bottomLeftPosition = wheelInfoPositions.bl(wheelInfoWidth)
 
@@ -219,7 +225,7 @@ export default class RobotSketch extends Component {
 
             // Draw bottom right info
             {
-                const {angleString, speedString} = getWheelInfoStrings(angles[1][1], speeds[1][1])
+                const {angleString, speedString} = getWheelInfoStrings(angles[3], speeds[3])
                 const bottomRightPosition = wheelInfoPositions.br()
 
                 drawWheelInfo({position: bottomRightPosition, angleString, speedString})
@@ -248,8 +254,9 @@ export default class RobotSketch extends Component {
                 const robotWheelAngles = getRobotWheelAngles()
                 const angles = convertWheelAnglesToP5Angles(robotWheelAngles)
                 const robotWheelSpeeds = getRobotWheelSpeeds()
+                const robotWheelPercents = getRobotWheelPercents()
 
-                drawWheels({angles, p, robotPosition, robotSideWidth})
+                drawWheels({angles, p, robotPosition, robotSideWidth, speedPercent: robotWheelPercents})
 
                 drawAllWheelInfo({angles: robotWheelAngles, speeds: robotWheelSpeeds, p, robotPosition, robotSideWidth})
             }
