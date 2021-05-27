@@ -8,7 +8,8 @@ export default class DebugInput extends Component {
         super(props)
 
         this.state = {
-            value: this.props.value
+            value: this.props.value,
+            lastProps: this.props.value
         }
     }
 
@@ -28,19 +29,15 @@ export default class DebugInput extends Component {
         this.props.putValueNT(this.props.ntkey, this.state.value)
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        // Problem!
-        // Basically, you can't change the text in the input without it immediately changing it back.
-        // Notes: Stateisbeingupdated returns true before state is changed, and false after.
-        // That means it returns false the iteration before it needs to
-        // Not sure what the solution. Might need to play around with the logic.
+    shouldComponentUpdate(nextProps) {
+        const propsValuesHaveChanged = nextProps.nt[this.props.ntkey] != this.state.lastProps
+        const propsValuesWillChange = this.props.nt[this.props.ntkey] != nextProps.nt[this.props.ntkey]
 
-        const propsValuesHaveChanged = this.props.nt[this.props.ntkey] != nextProps.nt[this.props.ntkey]
-        const stateIsBeingUpdated = this.state.value != nextState.value
-        
-        const stateIsDifferentFromProps = this.state.value != nextProps.nt[this.props.ntkey]
-
-        if((propsValuesHaveChanged || stateIsDifferentFromProps) && !stateIsBeingUpdated) this.updateValue(nextProps.nt[this.props.ntkey])
+        if(propsValuesHaveChanged) { // Accounts for when the debug page is left and returned to
+            this.updateValue(nextProps.nt[this.props.ntkey])
+            this.setState({lastProps: nextProps.nt[this.props.ntkey]})
+        }
+        else if(propsValuesWillChange) this.updateValue(nextProps.nt[this.props.ntkey])
     }
 
     render() {

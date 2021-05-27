@@ -123,6 +123,11 @@ export const createNetworkTablesInterface = (
         const testMap = createTestNTMap(testData)
 
         setNTMapState(testMap)
+
+        // Mimic the continuous updates from live data
+        setInterval(() => {
+            setNetworkTablesState(tempNT)
+        }, 250) 
     }
     
     const keys = () => NetworkTables.getKeys()

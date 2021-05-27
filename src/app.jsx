@@ -5,6 +5,8 @@ import Debug from "./debug"
 import Home from "./home"
 import Menu from "./components/menu"
 
+// TODO Make it so we can edit the data in debug page.
+
 export default class App extends Component {
     constructor() {
         super()
@@ -20,7 +22,7 @@ export default class App extends Component {
             setNetworkTablesState: (nt) => this.setNetworkTablesState(nt),
             getNTMapState: () => this.getNTMapState(),
             setNTMapState: (ntMap) => this.setNTMapState(ntMap),
-            usingTestData: false,
+            usingTestData: true,
             blacklist: ["LiveWindow"]
         })
 
