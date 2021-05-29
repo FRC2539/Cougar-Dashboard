@@ -29,7 +29,7 @@ export default class Mechanisms extends Component {
                     return (
                         <div className="flex flex-row font-medium justify-between items-center mb-0.5">
                             <div className="text-left self-start">{key}:</div>
-                            <div className={"text-right self-end w-1/5 h-4 rounded-full" + (this.props.nt[value] == true ? " bg-green" : " bg-red")}></div>
+                            <div className={"text-right self-end w-1/5 h-4 rounded-full border-black border " + (this.props.nt[value] == true ? " bg-green" : " bg-red")}></div>
                         </div>
                     )
                 })}

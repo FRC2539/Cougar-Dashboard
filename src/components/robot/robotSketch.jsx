@@ -20,7 +20,7 @@ export default class RobotSketch extends Component {
 
         const getRobotWheelSpeeds = () => {
             const robotWheelSpeedsKey = "/Swerve Drive/wheelSpeeds"
-            const defaultValue = [0,0,0,0] // Speeds in feet per seconds
+            const defaultValue = [0,0,0,0] // Speeds in feet per second
 
             if(!(robotWheelSpeedsKey in this.props.nt)) return defaultValue
 
