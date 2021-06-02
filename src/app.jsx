@@ -20,7 +20,7 @@ export default class App extends Component {
             setNetworkTablesState: (nt) => this.setNetworkTablesState(nt),
             getNTMapState: () => this.getNTMapState(),
             setNTMapState: (ntMap) => this.setNTMapState(ntMap),
-            usingTestData: true,
+            usingTestData: false,
             blacklist: ["LiveWindow"]
         })
 

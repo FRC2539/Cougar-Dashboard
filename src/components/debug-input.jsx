@@ -17,7 +17,16 @@ export default class DebugInput extends Component {
         // Don't change it if the input would be empty
         if(newValue == "") return
 
+        if(this.isNumberInput()) {
+            if(Number.isInteger(parseFloat(newValue))) newValue = parseInt(newValue)
+            else newValue = parseFloat(newValue)
+        }
+
         this.setState({value: newValue})
+    }
+
+    isNumberInput() {
+        return this.props.type == "number"
     }
 
     updateNT() {

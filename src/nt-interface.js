@@ -114,7 +114,6 @@ export const createNetworkTablesInterface = (
         }
 
         NetworkTables.putValue(key, value) 
-
     }
 
     const initializeTestData = () => {
