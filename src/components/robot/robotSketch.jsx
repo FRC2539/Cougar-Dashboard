@@ -241,7 +241,7 @@ export default class RobotSketch extends Component {
                 p.clear()
 
                 const robotSideWidth = p.min(p.height * 0.8, p.width * 0.6)
-                const robotStrokeWidth = 12
+                const robotStrokeWidth = 6
 
                 const robotPosition = p.createVector(p.width / 2, p.height / 2)
 

@@ -34,7 +34,7 @@ export default class CompassSketch extends Component {
         const drawCompassCircle = (p, diameter, circleCenter) => {
             p.noFill()
             p.stroke(0)
-            p.strokeWeight(8)
+            p.strokeWeight(4)
             p.circle(circleCenter.x, circleCenter.y, diameter)
         }
 

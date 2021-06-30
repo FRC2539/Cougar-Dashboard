@@ -9,7 +9,7 @@ export default class Robot extends Component {
 
     render() {
         return (
-            <div className="shadow row-span-3 col-span-6 bg-orange rounded-lg p-1 mt-3 mb-3 grid grid-cols-2">
+            <div className="shadow row-span-2 col-span-4 bg-orange rounded-lg p-2 mt-3 mb-3 grid grid-cols-2">
                 <RobotSketch nt={this.props.nt}/>
                 <CompassSketch nt={this.props.nt}/>
             </div>
