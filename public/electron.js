@@ -2,7 +2,7 @@ const electron = require("electron")
 
 const { app, BrowserWindow } = electron
 
-const { exec } = require("child_process")
+const { exec, execFile } = require("child_process")
 
 const path = require("path")
 const isDev = require("electron-is-dev")
@@ -11,9 +11,6 @@ const ALWAYS_USE_PYTHON = false
 
 const PYTHON_SERVER_COMMAND = "conda activate && python -m pynetworktables2js"
 
-// Uses an executable for portability on windows
-const EXECUTABLE_SERVER_COMMAND = "pynetworktables2js --team=2539"
-
 let mainWindow = null
 
 let pythonServer
@@ -21,7 +18,8 @@ let pythonServer
 app.on("ready", () => {
 	createWindow()
 
-	if(process.platform != "win32" || ALWAYS_USE_PYTHON) pythonServer = startPythonServer()
+	if (process.platform != "win32" || ALWAYS_USE_PYTHON)
+		pythonServer = startPythonServer()
 	else pythonServer = startExecutableServer()
 })
 
@@ -38,8 +36,12 @@ app.on("activate", () => {
 })
 
 function createWindow() {
+	const { width } = require("electron").screen.getPrimaryDisplay().size
+
 	mainWindow = new BrowserWindow({
-		width: 1024,
+		width: width,
+		x: 0,
+		y: 0,
 		height: 550,
 		title: "Cougar Dashboard",
 	})
@@ -73,6 +75,20 @@ function executeCommand(command) {
 	return process
 }
 
+function executeFile(file, args) {
+	const process = execFile(file, args, (error, stdout, stderr) => {
+		if (error) {
+			console.error(`exec error: ${error}`)
+			return
+		}
+
+		console.log(`stdout: ${stdout}`)
+		console.error(`stderr: ${stderr}`)
+	})
+
+	return process
+}
+
 function startPythonServer() {
 	// Start the pynetworktables2js server
 	const command = PYTHON_SERVER_COMMAND
@@ -86,13 +102,14 @@ function startPythonServer() {
 }
 
 function startExecutableServer() {
-	// Start the pynetworktables2js server
-	const command = EXECUTABLE_SERVER_COMMAND
+	// Start the server
+	const file = "pynetworktables2js.exe"
+	const args = ["--team=2539"]
 
 	// Ouput the current command being used
-	console.log(`Using: ${command} \n for pynetworktables2js`)
+	console.log(`Using: executable for pynetworktables2js`)
 
-	const serverProcess = executeCommand(command)
+	const serverProcess = executeFile(file, args)
 
 	return serverProcess
 }
