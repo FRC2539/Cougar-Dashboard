@@ -7,13 +7,22 @@ const { exec } = require("child_process")
 const path = require("path")
 const isDev = require("electron-is-dev")
 
+const ALWAYS_USE_PYTHON = false
+
+const PYTHON_SERVER_COMMAND = "conda activate && python -m pynetworktables2js"
+
+// Uses an executable for portability on windows
+const EXECUTABLE_SERVER_COMMAND = "pynetworktables2js --team=2539"
+
 let mainWindow = null
 
 let pythonServer
 
 app.on("ready", () => {
 	createWindow()
-	pythonServer = startPythonServer()
+
+	if(process.platform != "win32" || ALWAYS_USE_PYTHON) pythonServer = startPythonServer()
+	else pythonServer = startExecutableServer()
 })
 
 app.on("window-all-closed", () => {
@@ -66,7 +75,19 @@ function executeCommand(command) {
 
 function startPythonServer() {
 	// Start the pynetworktables2js server
-	const command = "conda activate && python -m pynetworktables2js"
+	const command = PYTHON_SERVER_COMMAND
+
+	// Ouput the current command being used
+	console.log(`Using: ${command} \n for pynetworktables2js`)
+
+	const serverProcess = executeCommand(command)
+
+	return serverProcess
+}
+
+function startExecutableServer() {
+	// Start the pynetworktables2js server
+	const command = EXECUTABLE_SERVER_COMMAND
 
 	// Ouput the current command being used
 	console.log(`Using: ${command} \n for pynetworktables2js`)
@@ -82,6 +103,6 @@ function killPythonServer(serverProcess) {
 
 	console.log(`Python Server Process ID: ${pid}`)
 
-	// Try using SIGKILL
+	// Try to kill the process
 	serverProcess.kill()
 }
