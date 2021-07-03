@@ -35,3 +35,4 @@ Note: If you are developing the app and want to test the electron app before bui
 To start a development server for the website and the electron app, call `npm run electron-dev`.
 
 Optionally, if you want to use python on windows, simply follow the steps in *Requirements* and *Production* for *MAC* and *LINUX*.
+Then, set `ALWAYS_USE_PYTHON = true` in public/electron.js to use python on windows. 
