@@ -31,7 +31,7 @@ app.on("activate", () => {
 function createWindow() {
 	mainWindow = new BrowserWindow({
 		width: 1024,
-		height: 640,
+		height: 550,
 		title: "Cougar Dashboard",
 	})
 
