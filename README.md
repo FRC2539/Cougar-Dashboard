@@ -36,3 +36,9 @@ To start a development server for the website and the electron app, call `npm ru
 
 Optionally, if you want to use python on windows, simply follow the steps in *Requirements* and *Production* for *MAC* and *LINUX*.
 Then, set `ALWAYS_USE_PYTHON = true` in public/electron.js to use python on windows. 
+
+### Connecting the app with the FRC Dashboard (WINDOWS)
+1) Confirm that the app is installed (the setup executable has been run).
+2) Identify the path to the installed app. This path should be `C:\Users\[YOUR USERNAME HERE]\AppData\Local\Programs\Cougar-Dashboard\Cougar-Dashboard.exe`. If you can't find the app at that location, find the desktop shortcut to the dashboard app, right click and open properties, and you will find the path labelled **target**.
+3) Edit the configuration file for the driver station app (this assumes the driver station app is already installed). See instructions here: [Official Instructions](https://docs.wpilib.org/en/stable/docs/software/driverstation/manually-setting-the-driver-station-to-start-custom-dashboard.html). When you replace the `DashboardCmdLine`, replace it with `""C:\Users\[YOUR USERNAME HERE]\AppData\Local\Programs\Cougar-Dashboard\Cougar-Dashboard.exe""`, or whichever path you identified in step 2. 
+
