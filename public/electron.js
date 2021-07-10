@@ -103,7 +103,7 @@ function startPythonServer() {
 
 function startExecutableServer() {
 	// Start the server
-	const file = "pynetworktables2js.exe"
+	const file = `${path.join(__dirname, "../build/pynetworktables2js.exe")}`
 	const args = ["--team=2539"]
 
 	// Ouput the current command being used
