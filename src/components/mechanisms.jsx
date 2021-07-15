@@ -8,8 +8,7 @@ export default class Mechanisms extends Component {
 
         this.mechanisms = {
             "Intake": "/Intake/Intake Running",
-            "Conveyor": "/Conveyor/Conveyor Running",
-            "Chamber": "/Chamber/Chamber Running"
+            "ConveyorIntake Running": "/ConveyorIntake/ConveyorIntake Running"
         }
     }
 
