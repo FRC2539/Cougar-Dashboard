@@ -8,7 +8,8 @@
     "build": "vite build",
     "serve": "vite preview",
     "electron-dev": "concurrently \"npm run dev\" \"electron .\"",
-    "electron-pack": "electron-builder -c.extraMetadata.main=public/electron.js"
+    "electron-pack": "electron-builder",
+    "release": "vite build && electron-builder"
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.2.1",
