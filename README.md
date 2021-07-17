@@ -16,7 +16,12 @@ After installing python, install [pynetworktables2js](https://github.com/robotpy
 
 To test out the server, run `python -m pynetworktables2js` (once it is installed).
 
+### Installing the app
+On a windows driver station, building the app is no longer required. Simply download the latest setup exe file from the github releases and run that to install the latest version. If there is an update, download that newer version and run the setup and it will update.
+
 ### Building the app
+**Building the app is no longer required for installation. Refer to the above section for a guide to installing the app.**
+
 First, you need to clone the repo locally.
 
 Next, call `npm install` to install all of the packages.
