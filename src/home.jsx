@@ -5,6 +5,7 @@ import Mechanisms from "./components/mechanisms"
 import Messages from "./components/messages"
 import Robot from "./components/robot"
 import Autos from "./components/autos"
+import Climber from "./components/climber"
 export default class Home extends Component {
     constructor(props) {
         super(props)
@@ -16,7 +17,8 @@ export default class Home extends Component {
                 <div className="max-h-full col-span-2 grid grid-rows-6 grid-cols-6 p-3">
                     <Messages nt={this.props.nt} />
                     <Mechanisms nt={this.props.nt} />
-                    <div className="mt-1 col-span-2 row-span-2 bg-team-logo bg-center bg-contain bg-no-repeat"></div>
+                    <Climber nt={this.props.nt} />
+                    {/* <div className="mt-1 col-span-2 row-span-2 bg-team-logo bg-center bg-contain bg-no-repeat"></div> */}
                     <Robot nt={this.props.nt} /> 
                     <Autos nt={this.props.nt} putValueNT={this.props.putValueNT}/>
                 </div>
