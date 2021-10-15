@@ -122,16 +122,16 @@ function startPythonServer() {
 }
 
 function startExecutableServer() {
-	if(!store.has("team")) store.set("team", "9539")
+	// if(!store.has("team")) store.set("team", "9539")
 	
-	const teamNumber = store.get("team", "9539")
+	// const teamNumber = store.get("team", "9539")
 
-	console.log(teamNumber)
+	// console.log(teamNumber)
 
 	// Start the server
 	const file = `${path.join(__dirname, "../build/pynetworktables2js.exe")}`
 	// const args = [`--team ${teamNumber}`]
-	const args = ["--team 9539"]
+	const args = ["--team=9539"]
 // 
 
 	// Ouput the current command being used
