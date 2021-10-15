@@ -1,4 +1,5 @@
 const electron = require("electron")
+const { ipcMain } = require('electron')
 
 const { app, BrowserWindow } = electron
 
@@ -14,6 +15,22 @@ const PYTHON_SERVER_COMMAND = "conda activate && python -m pynetworktables2js"
 let mainWindow = null
 
 let pythonServer
+
+// Setup a persistent store
+const Store = require("electron-store")
+
+const schema = {
+	team: {
+		type: "string"
+	}
+}
+
+const store = new Store({schema})
+
+// Send the team number to the front end
+ipcMain.on("team-number", (event) => {
+	event.returnValue = store.get("team", "2539")
+})
 
 app.on("ready", () => {
 	createWindow()
@@ -44,6 +61,9 @@ function createWindow() {
 		y: 0,
 		height: 550,
 		title: "Cougar Dashboard",
+		webPreferences: {
+			nodeIntegration: false
+		},
 	})
 
 	mainWindow.loadURL(
@@ -102,9 +122,15 @@ function startPythonServer() {
 }
 
 function startExecutableServer() {
+	if(!store.has("team")) store.set("team", "9539")
+	
+	const teamNumber = store.get("team", "9539")
+
+	console.log(teamNumber)
+
 	// Start the server
 	const file = `${path.join(__dirname, "../build/pynetworktables2js.exe")}`
-	const args = ["--team=2539"]
+	const args = [`--team=${teamNumber}`]
 
 	// Ouput the current command being used
 	console.log(`Using: executable for pynetworktables2js`)
