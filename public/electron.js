@@ -130,7 +130,7 @@ function startExecutableServer() {
 
 	// Start the server
 	const file = `${path.join(__dirname, "../build/pynetworktables2js.exe")}`
-	const args = [`--team=${teamNumber}`]
+	const args = [`--team ${teamNumber}`]
 
 	// Ouput the current command being used
 	console.log(`Using: executable for pynetworktables2js`)
