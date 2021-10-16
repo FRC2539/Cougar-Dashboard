@@ -140,7 +140,7 @@ export const createNetworkTablesInterface = (
 
             // const teamNumber = localStorage.getItem("team")
 
-            NetworkTables.connect("")
+            NetworkTables.connect("roborio-9539-frc.local")
             // NetworkTables.connect(`roborio-${teamNumber}-frc.local`)
         }, true)
 
