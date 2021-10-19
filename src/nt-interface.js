@@ -135,13 +135,10 @@ export const createNetworkTablesInterface = (
         NetworkTables.addWsConnectionListener((connected) => {
             console.log("Websocket connected: " + connected)
 
-            // const teamNumber = ipcRenderer.sendSync("team-number")
-            // if(!localStorage.getItem("team")) localStorage.setItem("team", "2539")
+            // Get the team number, which is exposed by the context bridge in preload.js
+            const teamNumber = window.config.teamNumber
 
-            // const teamNumber = localStorage.getItem("team")
-
-            NetworkTables.connect("roborio-9539-frc.local")
-            // NetworkTables.connect(`roborio-${teamNumber}-frc.local`)
+            NetworkTables.connect(`roborio-${teamNumber}-frc.local`)
         }, true)
 
         NetworkTables.addRobotConnectionListener((connected) => {

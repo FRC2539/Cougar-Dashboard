@@ -1,5 +1,4 @@
 const electron = require("electron")
-const { ipcMain } = require('electron')
 
 const { app, BrowserWindow } = electron
 
@@ -26,11 +25,6 @@ const schema = {
 }
 
 const store = new Store({schema})
-
-// Send the team number to the front end
-ipcMain.on("team-number", (event) => {
-	event.returnValue = store.get("team", "2539")
-})
 
 app.on("ready", () => {
 	createWindow()
@@ -62,7 +56,7 @@ function createWindow() {
 		height: 550,
 		title: "Cougar Dashboard",
 		webPreferences: {
-			nodeIntegration: false
+			preload: `${path.join(__dirname, "./preload.js")}`
 		},
 	})
 
@@ -122,17 +116,14 @@ function startPythonServer() {
 }
 
 function startExecutableServer() {
-	// if(!store.has("team")) store.set("team", "9539")
+	if(!store.has("team")) store.set("team", "2539")
 	
-	// const teamNumber = store.get("team", "9539")
-
-	// console.log(teamNumber)
+	const teamNumber = store.get("team", "2539")
 
 	// Start the server
 	const file = `${path.join(__dirname, "../build/pynetworktables2js.exe")}`
-	// const args = [`--team ${teamNumber}`]
-	const args = ["--team=9539"]
-// 
+
+	const args = [`--team=${teamNumber}`]
 
 	// Ouput the current command being used
 	console.log(`Using: executable for pynetworktables2js`)
