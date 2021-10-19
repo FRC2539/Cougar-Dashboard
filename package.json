@@ -1,7 +1,7 @@
 {
   "name": "Cougar-Dashboard",
   "author": "FRC Team 2539",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "public/electron.js",
   "scripts": {
     "dev": "vite",
@@ -31,7 +31,8 @@
     "files": [
       "./build/**/*",
       "./build/icon.*",
-      "./public/electron.js"
+      "./public/electron.js",
+      "./public/preload.js"
     ]
   }
 }
