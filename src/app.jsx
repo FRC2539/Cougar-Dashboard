@@ -58,7 +58,7 @@ export default class App extends Component {
 
     render() {
         return (
-            <div className="relative">
+            <span>
                 {
                     {
                         "home": <Home nt={this.state.nt} putValueNT={this.ntInterface.putValue} />,
@@ -66,7 +66,7 @@ export default class App extends Component {
                     }[this.state.page]
                 }
                 <Menu currentPage={this.state.page} pages={this.pages} setPage={(page) => this.setPage(page)}/>
-            </div>
+            </span>
         )
     }
 }

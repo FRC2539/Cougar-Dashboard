@@ -1,6 +1,7 @@
 import { Component } from "preact"
 
-import CameraFeed from "./components/cameras"
+import LimelightFeed from "./components/limelight"
+import IntakeCameraFeed from "./components/intakecamera"
 import Mechanisms from "./components/mechanisms"
 import Messages from "./components/messages"
 import Robot from "./components/robot"
@@ -13,17 +14,17 @@ export default class Home extends Component {
 
     render() {
         return (
-            <div className="grid grid-cols-3 w-full h-full bg-gray text-black">
-                <div className="max-h-full col-span-2 grid grid-rows-6 grid-cols-6 p-3">
-                    <Messages nt={this.props.nt} />
+            <div className="grid grid-cols-12 w-full max-h-full h-full bg-gray text-black">
+                <div className="max-h-full col-span-3 grid grid-rows-8 grid-cols-1 p-3">
                     <Mechanisms nt={this.props.nt} />
-                    <Climber nt={this.props.nt} />
-                    {/* <div className="mt-1 col-span-2 row-span-2 bg-team-logo bg-center bg-contain bg-no-repeat"></div> */}
-                    <Robot nt={this.props.nt} /> 
                     <Autos nt={this.props.nt} putValueNT={this.props.putValueNT}/>
                 </div>
-                <div className="col-span-1 flex flex-col justify-between p-3">
-                    <CameraFeed nt={this.props.nt}/>
+                <div className="col-span-6 flex flex-row justify-around p-3">
+                    <IntakeCameraFeed nt={this.props.nt}/>
+                </div>
+                <div className="col-span-3 flex flex-col justify-between p-3">
+                    <LimelightFeed nt={this.props.nt}/>
+                    <Robot nt={this.props.nt} /> 
                 </div>
             </div>
         )
