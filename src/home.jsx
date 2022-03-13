@@ -23,7 +23,7 @@ export default class Home extends Component {
                     <IntakeCameraFeed nt={this.props.nt}/>
                 </div>
                 <div className="col-span-3 flex flex-col justify-between p-3">
-                    <LimelightFeed nt={this.props.nt}/>
+                    <LimelightFeed nt={this.props.nt} putValueNT={this.props.putValueNT}/>
                     <Robot nt={this.props.nt} /> 
                 </div>
             </div>
