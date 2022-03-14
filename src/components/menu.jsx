@@ -10,7 +10,17 @@ export default class Menu extends Component {
         this.state = {
             collapsed: true
         }
+
+        // window.addEventListener("keydown", (e) => {
+            
+        // })
     }
+
+    // handleKeyPress = (event) => {
+    //     if(event.keyCode === 9){
+    //         //hi
+    //     }
+    // }
 
     render({currentPage, pages, setPage}) {
         return (
@@ -21,6 +31,7 @@ export default class Menu extends Component {
                             <rect width="100" height="18" rx="10"></rect>
                             <rect y="30" width="100" height="18" rx="10"></rect>
                             <rect y="60" width="100" height="18" rx="10"></rect>
+                            <rect y="90" width="100" height="18" rx="10"></rect>
                         </svg> 
                     </a>
                 </div>
