@@ -10,26 +10,44 @@ export default class Menu extends Component {
         this.state = {
             collapsed: true
         }
-
-        // window.addEventListener("keydown", (e) => {
-            
-        // })
+      
     }
 
-    // handleKeyPress = (event) => {
-    //     if(event.keyCode === 9){
-    //         //hi
-    //     }
-    // }
-
     render({currentPage, pages, setPage}) {
+
+        const wrapAround = (num, arrayLength) => {
+            if (num < 0) return arrayLength - 1
+            else if (num >= arrayLength) return 0
+            else return num
+        }
+
+        const handleKeyDown = (e) => {
+            if(e.code == "Tab" && !e.shiftKey){
+                window.removeEventListener("keydown", handleKeyDown)
+
+                e.preventDefault()
+                const nextPageIndex = wrapAround(pages.indexOf(currentPage) + 1, pages.length)
+                setPage(pages[nextPageIndex])
+            }
+
+            else if(e.code == "Tab" && e.shiftKey){
+                window.removeEventListener("keydown", handleKeyDown)
+
+                e.preventDefault()
+                const nextPageIndex = wrapAround(pages.indexOf(currentPage) - 1, pages.length)
+                setPage(pages[nextPageIndex])
+            }
+        }
+
+        window.addEventListener("keydown", handleKeyDown)
+
         return (
             <div className="fixed top-2 right-3">
                 <div className={!this.state.collapsed ? "hidden" : "block"}>
                     <a onClick={() => this.setState({collapsed: false})} className="cursor-pointer">
                         <svg viewBox="0 0 100 80" width="30" height="30" fill="white" className="shadow-svg">
                             <rect width="100" height="18" rx="10"></rect>
-                            <rect y="30" width="100" height="18" rx="10"></rect>
+                            <rect y="30" width="100" height="18" rx="10"></rect> 
                             <rect y="60" width="100" height="18" rx="10"></rect>
                             <rect y="90" width="100" height="18" rx="10"></rect>
                         </svg> 
