@@ -3,10 +3,8 @@ import { Component } from "preact"
 import LimelightFeed from "./components/limelight"
 import IntakeCameraFeed from "./components/intakecamera"
 import Mechanisms from "./components/mechanisms"
-import Messages from "./components/messages"
 import Robot from "./components/robot"
 import Autos from "./components/autos"
-import Climber from "./components/climber"
 export default class Home extends Component {
     constructor(props) {
         super(props)

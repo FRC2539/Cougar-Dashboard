@@ -1,7 +1,5 @@
 import { Component } from "preact" 
 
-import RobotSketch from "./robot/robotSketch"
-import CompassSketch from "./robot/compassSketch"
 import LimelightOffset from "./robot/limelightOffset"
 export default class Robot extends Component {
     constructor(props) {
