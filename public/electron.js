@@ -9,7 +9,7 @@ const isDev = require("electron-is-dev")
 
 const ALWAYS_USE_PYTHON = false
 
-const PYTHON_SERVER_COMMAND = "conda activate && python -m pynetworktables2js"
+const PYTHON_SERVER_COMMAND = "python -m pynetworktables2js"
 
 let mainWindow = null
 

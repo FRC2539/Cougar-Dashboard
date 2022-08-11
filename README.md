@@ -10,7 +10,7 @@ No other requirements
 
 #### MAC or LINUX:
 Currently the network tables server uses python on platforms other than windows.
-That means it is also required to have python 3 installed on the computer.
+That means it is also required to have python 3 (3.8 preferred) installed on the computer.
 
 After installing python, install [pynetworktables2js](https://github.com/robotpy/pynetworktables2js) with `pip install pynetworktables2js`.
 
