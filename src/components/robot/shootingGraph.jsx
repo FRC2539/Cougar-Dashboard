@@ -4,7 +4,7 @@ export default class ShootingGraph extends Component {
     constructor(props) {
         super(props)
 
-        this.shootingMap = "/Commands/shootingMap"
+        this.shootingMap = "/Commands/shooterMap"
 
         // this.rawTestValue = "{\"3.0\": [2400, 1550], \"3.7\": [2800, 1550], \"3.9\": [2900, 1550], \"4.45\": [3200, 1650], \"5.1\": [3900, 2000]}"
 
@@ -12,7 +12,7 @@ export default class ShootingGraph extends Component {
     }
 
     calculateShooterValueRange(shootingMap) {
-        const sortedValues = Object.values(shootingMap).flat().sort()
+        const sortedValues = Object.values(shootingMap).flat().sort((a, b) => a - b)
 
         return {min: sortedValues[0], max: sortedValues[sortedValues.length - 1]}
     }
