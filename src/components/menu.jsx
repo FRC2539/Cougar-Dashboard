@@ -1,5 +1,4 @@
-import { Component } from "preact/compat"
-import KeyboardEventHandler from "react-keyboard-event-handler"
+import { Component } from "preact"
 
 export default class Menu extends Component {
     /**
@@ -25,24 +24,6 @@ export default class Menu extends Component {
     render({currentPage, pages, setPage}) {
         return (
             <div className="fixed top-2 right-3">
-                 
-                <KeyboardEventHandler
-                    handleKeys = {['tab']}
-                    onKeyEvent = {(key, e) => {
-                            e.preventDefault()
-                            const nextPageIndex = this.wrapAround(pages.indexOf(currentPage) + 1, pages.length)
-                            setPage(pages[nextPageIndex])
-                    } 
-                }/>
-
-                <KeyboardEventHandler
-                    handleKeys = {['shift+tab']}
-                    onKeyEvent = {(key, e) => {
-                            e.preventDefault()
-                            const nextPageIndex = this.wrapAround(pages.indexOf(currentPage) - 1, pages.length)
-                            setPage(pages[nextPageIndex])
-                    } 
-                }/>
         
                 <div className={!this.state.collapsed ? "hidden" : "block"}>
                     <a onClick={() => this.setState({collapsed: false})} className="cursor-pointer">
