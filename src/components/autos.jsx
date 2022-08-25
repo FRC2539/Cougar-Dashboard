@@ -33,7 +33,6 @@ export default class Autos extends Component {
 
     render() {
         return (
-            // <div class="grid grid-flow-auto">
             <div class="grid grid-cols-3 col-span-2 row-span-2 mt-2 ml-2">
                 {this.getButtonHTML()}
             </div>

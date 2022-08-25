@@ -7,18 +7,10 @@ export default class Debug extends Component {
 
         this.state = {
             search: "",
-            // data: new Map() // Header => Map(key => value)
-                            // E.g. Autonomous => Map("selectedAuto" => "example")
         }
     }
 
     render() {
-        // Convert the network tables data to a header-based map
-        // const data = this.createDataMap()
-
-
-        // Current plan: check if the current data is equal. If so, don't do anything. If not, update.
-
         const html = this.dataToHTML(this.props.ntMap)
         
         return (
@@ -39,28 +31,4 @@ export default class Debug extends Component {
 
         return html
     } 
-
-    // createDataMap() {
-    //     const data = new Map()
-
-    //     for(const [key, value] of Object.entries(this.props.nt)) {
-    //         const {header, subkey} = this.getHeader(key)
-
-    //         if(!data.has(header)) data.set(header, new Map())
-
-    //         const keysMap = data.get(header)
-
-    //         keysMap.set(subkey, value)
-    //     }
-
-    //     return data
-    // }
-
-    // getHeader(key) {
-    //     const path = key.split("/")
-    //     const header = path[1]
-    //     const subkey = key.slice(header.length + 2) // `2` here accounts for the slashes
-
-    //     return {header, subkey}
-    // }
 }
