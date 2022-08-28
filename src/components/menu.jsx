@@ -13,6 +13,7 @@ export default class Menu extends Component {
             props: props
         }
       
+        this.keyPressed = this.keyPressed.bind(this)
     }
 
     wrapAround(num, arrayLength) {
@@ -21,9 +22,20 @@ export default class Menu extends Component {
         else return num
     }
 
+    keyPressed(e, currentPage, pages, setPage) {
+        const tabPressed = e.key === "Tab"
+        const shiftPressed = e.shiftKey
+
+        if(tabPressed && shiftPressed) {
+            setPage(pages[this.wrapAround(pages.indexOf(currentPage) - 1, pages.length)])
+        } else if(tabPressed) {
+            setPage(pages[this.wrapAround(pages.indexOf(currentPage) + 1, pages.length)])
+        }
+    }
+
     render({currentPage, pages, setPage}) {
         return (
-            <div className="fixed top-2 right-3">
+            <div className="fixed top-2 right-3" onKeyUp={(e) => this.keyPressed(e, currentPage, pages, setPage)} tabIndex={0}>
         
                 <div className={!this.state.collapsed ? "hidden" : "block"}>
                     <a onClick={() => this.setState({collapsed: false})} className="cursor-pointer">
