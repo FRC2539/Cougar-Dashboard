@@ -1,4 +1,5 @@
 import { Component } from "preact";
+import splitNewLines from "./split-text";
 
 const POSITIONS = {
     trigger: {x: 779, y: 196},
@@ -39,21 +40,6 @@ export const DefaultThrustmasterJoystickControllerData = {
 }
 
 export default class ThrustmasterJoystickController extends Component {
-    // spacing and new line cuttoff is based off a bunch of upercase As
-    // it might not look pretty for most stuff but at least it will work
-    // maybe it should cut at spaces...
-    splitNewLines (text, X, Y) {
-        const splitText = text.match(/.{1,13}/g)
-        let output = []
-        let nextY = Y
-
-        for (let segment of splitText) {
-            output.push(<text x={X} y={nextY} font-size="larger">{segment}</text>)
-            nextY = nextY + 21
-        }
-        return output
-    }
-
 constructor(props) {
     super(props)
 }
@@ -64,10 +50,10 @@ constructor(props) {
         for (let [key, value] of Object.entries(this.props.data)) {
             if (key === 'type') continue;
             let cordinates =  POSITIONS[key]
-            boxes.push(this.splitNewLines(value, cordinates.x, cordinates.y))
+            boxes.push(splitNewLines(value, cordinates.x, cordinates.y))
         }
         return (
-        <svg viewBox="0 0 960 720" className="bg-orange rounded-lg flex-initial"> 
+        <svg viewBox="0 0 960 720" className="bg-orange rounded-lg flex-initial p-1"> 
             <image href="/src/assets/thrustmaster-joystick.png"/>
             { boxes }
         </svg>

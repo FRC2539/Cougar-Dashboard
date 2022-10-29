@@ -1,4 +1,5 @@
 import { Component } from "preact";
+import splitNewLines from "./split-text";
 
 const POSITIONS = {
     A: {x: 788, y: 420},
@@ -39,18 +40,6 @@ export const DefaultLogitechControllerData = {
 }
 
 export default class LogitechController extends Component {
-    splitNewLines (text, X, Y) {
-        const splitText = text.match(/.{1,13}/g)
-        let output = []
-        let nextY = Y
-
-        for (let segment of splitText) {
-            output.push(<text x={X} y={nextY} font-size="larger">{segment}</text>)
-            nextY = nextY + 21
-        }
-        return output
-    }
-
 constructor(props) {
     super(props)
 }
@@ -61,10 +50,10 @@ constructor(props) {
         for (let [key, value] of Object.entries(this.props.data)) {
             if (key === 'type') continue;
             let cordinates =  POSITIONS[key]
-            boxes.push(this.splitNewLines(value, cordinates.x, cordinates.y))
+            boxes.push(splitNewLines(value, cordinates.x, cordinates.y))
         }
         return (
-        <svg viewBox="0 0 960 720" className="bg-orange rounded-lg flex-initial"> 
+        <svg viewBox="0 0 960 720" className="bg-orange rounded-lg flex-initial p-1"> 
             <image href="/src/assets/logitech-gamepad.png"/>
             { boxes }
         </svg>
