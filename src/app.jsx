@@ -6,6 +6,7 @@ import Home from "./home"
 import Console from "./console"
 import Field from "./field"
 import Menu from "./components/menu"
+import Controller from "./controller"
 
 export default class App extends Component {
     constructor() {
@@ -30,7 +31,8 @@ export default class App extends Component {
             "home",
             "debug",
             "console",
-            "field"
+            "field",
+            "controller"
         ]
     }
 
@@ -68,7 +70,8 @@ export default class App extends Component {
                         "home": <Home nt={this.state.nt} putValueNT={this.ntInterface.putValue} />,
                         "debug": <Debug ntMap={this.state.ntMap} nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>,
                         "console": <Console nt={this.state.nt}/>,
-                        "field": <Field nt={this.state.nt}/>
+                        "field": <Field nt={this.state.nt}/>,
+                        "controller": <Controller nt={this.state.nt}/>
                     }[this.state.page]
                 }
                 <Menu currentPage={this.state.page} pages={this.pages} setPage={(page) => this.setPage(page)}/>
