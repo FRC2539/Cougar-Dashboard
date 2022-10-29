@@ -39,15 +39,17 @@ export const DefaultThrustmasterJoystickControllerData = {
 }
 
 export default class ThrustmasterJoystickController extends Component {
-
+    // spacing and new line cuttoff is based off a bunch of upercase As
+    // it might not look pretty for most stuff but at least it will work
+    // maybe it should cut at spaces...
     splitNewLines (text, X, Y) {
-        const splitText = text.match(/.{1,18}/g)
+        const splitText = text.match(/.{1,13}/g)
         let output = []
         let nextY = Y
 
         for (let segment of splitText) {
-            output.push(<text x={X} y={nextY}>{segment}</text>)
-            nextY = nextY + 12
+            output.push(<text x={X} y={nextY} font-size="larger">{segment}</text>)
+            nextY = nextY + 21
         }
         return output
     }
@@ -65,7 +67,7 @@ constructor(props) {
             boxes.push(this.splitNewLines(value, cordinates.x, cordinates.y))
         }
         return (
-        <svg preserveAspectRatio="xMidYMid meet" width="960" height="720" viewBox="0 0 960 720"> 
+        <svg viewBox="0 0 960 720" className="bg-orange rounded-lg flex-initial"> 
             <image href="/src/assets/thrustmaster-joystick.png"/>
             { boxes }
         </svg>

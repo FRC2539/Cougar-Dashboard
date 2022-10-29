@@ -19,10 +19,10 @@ export default class Controller extends Component {
     this.controller2Data = this.props.nt[this.controller2Key] ?? DefaultLogitechControllerData
 
         return (
-            <div className="flex items-center justify-center h-screen w-screen">
-                <ThrustmasterJoystickController nt={this.props.nt} data={this.controller0Data} />
-                <ThrustmasterJoystickController nt={this.props.nt} data={this.controller1Data} />
-                <LogitechController nt={this.props.nt} data={this.controller2Data} />
+            <div className="flex flex-row items-center justify-between h-screen w-screen gap-3">
+                    <ThrustmasterJoystickController nt={this.props.nt} data={this.controller0Data}/>
+                    <ThrustmasterJoystickController nt={this.props.nt} data={this.controller1Data} />
+                    <LogitechController nt={this.props.nt} data={this.controller2Data} />
             </div>
         )
     }

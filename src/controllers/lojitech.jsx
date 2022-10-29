@@ -39,15 +39,14 @@ export const DefaultLogitechControllerData = {
 }
 
 export default class LogitechController extends Component {
-
     splitNewLines (text, X, Y) {
-        const splitText = text.match(/.{1,18}/g)
+        const splitText = text.match(/.{1,13}/g)
         let output = []
         let nextY = Y
 
         for (let segment of splitText) {
-            output.push(<text x={X} y={nextY}>{segment}</text>)
-            nextY = nextY + 12
+            output.push(<text x={X} y={nextY} font-size="larger">{segment}</text>)
+            nextY = nextY + 21
         }
         return output
     }
@@ -65,7 +64,7 @@ constructor(props) {
             boxes.push(this.splitNewLines(value, cordinates.x, cordinates.y))
         }
         return (
-        <svg preserveAspectRatio="xMidYMid meet" width="960" height="720" viewBox="0 0 960 720"> 
+        <svg viewBox="0 0 960 720" className="bg-orange rounded-lg flex-initial"> 
             <image href="/src/assets/logitech-gamepad.png"/>
             { boxes }
         </svg>
