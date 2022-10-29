@@ -1,7 +1,12 @@
 name: Build Release
+
+on:
+  push:
+    branches: [main]
+
 env: 
   GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-on: [push]
+
 jobs:
   release:
     runs-on: windows-latest
