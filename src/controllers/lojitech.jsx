@@ -2,22 +2,22 @@ import { Component } from "preact";
 import splitNewLines from "./split-text";
 
 const POSITIONS = {
-    A: {x: 788, y: 420},
-    B: {x: 762, y: 321},
-    X: {x: 763, y: 257},
-    Y: {x: 787, y: 193},
-    leftBumper: {x: 313, y: 25},
-    rightBumper: {x: 503, y: 25},
-    leftTrigger: {x: 25, y: 50},
-    rightTrigger: {x: 770, y: 52},
-    back: {x: 305, y: 90},
-    start: {x: 503, y: 90},
-    leftJoystick: {x: 278, y: 603},
-    rightJoystick: {x: 503, y: 595},
-    dPadUp: {x: 48, y: 187},
-    dPadRight: {x: 25, y: 251},
-    dPadDown: {x: 48, y: 415},
-    dPadLeft: {x: 25, y: 317},
+    A: {x: 788, y: 426},
+    B: {x: 762, y: 327},
+    X: {x: 763, y: 263},
+    Y: {x: 787, y: 199},
+    leftBumper: {x: 313, y: 31},
+    rightBumper: {x: 503, y: 31},
+    leftTrigger: {x: 25, y: 56},
+    rightTrigger: {x: 770, y: 58},
+    back: {x: 305, y: 98},
+    start: {x: 503, y: 98},
+    leftJoystick: {x: 278, y: 609},
+    rightJoystick: {x: 503, y: 602},
+    dPadUp: {x: 48, y: 193},
+    dPadRight: {x: 25, y: 257},
+    dPadDown: {x: 48, y: 421},
+    dPadLeft: {x: 25, y: 323},
 }
 
 export const DefaultLogitechControllerData = {
@@ -37,6 +37,7 @@ export const DefaultLogitechControllerData = {
     dPadRight: "dpad right",
     dPadDown: "dpad down",
     dPadLeft: "dpad left",
+    type: "LogitechController"
 }
 
 export default class LogitechController extends Component {
@@ -48,8 +49,8 @@ constructor(props) {
     render () {
         let boxes = []
         for (let [key, value] of Object.entries(this.props.data)) {
-            if (key === 'type') continue;
             let cordinates =  POSITIONS[key]
+            if (!cordinates) continue;
             boxes.push(splitNewLines(value, cordinates.x, cordinates.y))
         }
         return (

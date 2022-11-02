@@ -2,22 +2,22 @@ import { Component } from "preact";
 import splitNewLines from "./split-text";
 
 const POSITIONS = {
-    trigger: {x: 779, y: 196},
-    bottomThumb: {x: 300, y: 158},
-    leftThumb: {x: 300, y: 90},
-    rightThumb: {x: 779, y: 110},
-    leftTopLeft: {x: 21, y: 210},
-    leftTopMiddle: {x: 21, y: 155},
-    leftTopRight: {x: 21, y: 98},
-    leftBottomRight: {x: 10, y: 482},
-    leftBottomMiddle: {x: 10, y: 425},
-    leftBottomLeft: {x: 10, y: 368},
-    rightTopRight: {x: 779, y: 506},
-    rightTopMiddle: {x: 779, y: 448},
-    rightTopLeft: {x: 779, y: 388},
-    rightBottomLeft: {x: 779, y: 565},
-    rightBottomMiddle: {x: 779, y: 625},
-    rightBottomRight: {x: 779, y: 685},
+    trigger: {x: 779, y: 204},
+    bottomThumb: {x: 300, y: 166},
+    leftThumb: {x: 300, y: 98},
+    rightThumb: {x: 779, y: 116},
+    leftTopLeft: {x: 21, y: 216},
+    leftTopMiddle: {x: 21, y: 161},
+    leftTopRight: {x: 21, y: 104},
+    leftBottomRight: {x: 10, y: 488},
+    leftBottomMiddle: {x: 10, y: 434},
+    leftBottomLeft: {x: 10, y: 378},
+    rightTopRight: {x: 779, y: 513},
+    rightTopMiddle: {x: 779, y: 456},
+    rightTopLeft: {x: 779, y: 395},
+    rightBottomLeft: {x: 779, y: 572},
+    rightBottomMiddle: {x: 779, y: 634},
+    rightBottomRight: {x: 779, y: 690},
 }
 
 export const DefaultThrustmasterJoystickControllerData = {
@@ -33,10 +33,11 @@ export const DefaultThrustmasterJoystickControllerData = {
     leftBottomRight: "left bottom right",
     rightTopRight: "right top right",
     rightTopMiddle: "right top middle",
-    rightTopLeft: "right top middle",
+    rightTopLeft: "right top left",
     rightBottomLeft: "right bottom left",
     rightBottomMiddle: "right bottom middle",
-    rightBottomRight: "right bottom right"
+    rightBottomRight: "right bottom right",
+    type: "ThrustmasterJoystick"
 }
 
 export default class ThrustmasterJoystickController extends Component {
@@ -48,8 +49,8 @@ constructor(props) {
     render () {
         let boxes = []
         for (let [key, value] of Object.entries(this.props.data)) {
-            if (key === 'type') continue;
             let cordinates =  POSITIONS[key]
+            if (!cordinates) continue;
             boxes.push(splitNewLines(value, cordinates.x, cordinates.y))
         }
         return (
