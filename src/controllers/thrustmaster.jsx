@@ -55,7 +55,7 @@ constructor(props) {
         }
         return (
         <svg viewBox="0 0 960 720" className="bg-orange rounded-lg flex-initial p-1"> 
-            <image href="/src/assets/thrustmaster-joystick.png"/>
+            <image href="/thrustmaster-joystick.png"/>
             { boxes }
         </svg>
         )

@@ -55,7 +55,7 @@ constructor(props) {
         }
         return (
         <svg viewBox="0 0 960 720" className="bg-orange rounded-lg flex-initial p-1"> 
-            <image href="/src/assets/logitech-gamepad.png"/>
+            <image href="/logitech-gamepad.png"/>
             { boxes }
         </svg>
         )
