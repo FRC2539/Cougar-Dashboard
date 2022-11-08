@@ -54,8 +54,6 @@ export default class ShootingGraph extends Component {
             this.value = {}
         }
 
-        // this.value = JSON.parse(this.rawTestValue)
-
         this.shooterValueRange = this.calculateShooterValueRange(this.value)
 
         return (
