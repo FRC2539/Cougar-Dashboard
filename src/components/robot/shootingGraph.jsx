@@ -6,7 +6,7 @@ export default class ShootingGraph extends Component {
 
         this.shootingMap = "/Commands/shooterMap"
 
-        // this.rawTestValue = "{\"3.0\": [2400, 1550], \"3.7\": [2800, 1550], \"3.9\": [2900, 1550], \"4.45\": [3200, 1650], \"5.1\": [3900, 2000]}"
+        // this.rawTestValue = "{\"1.9\": [1500, 1000], \"2.5\": [2000, 1200], \"3.0\": [2400, 1550], \"3.7\": [2800, 1550], \"3.9\": [2900, 1550], \"4.45\": [3200, 1650], \"5.1\": [3900, 2000], \"6.0\": [4000, 2500], \"6.5\": [4000, 3000]}"
 
         this.svgHeightRange = {min: 40, max: 15}
     }
@@ -24,7 +24,7 @@ export default class ShootingGraph extends Component {
     }
 
     createDistanceColumn(shooterMap, distanceString, index, numberOfDistances) {
-        const xValue = ((index + 1) / (numberOfDistances + 1)) * 120 - 10
+        const xValue = ((index + 1) / (numberOfDistances + 1)) * 110 - 10
 
         const rearShooterHeight = this.mapRange(shooterMap[distanceString][0],
                                         this.shooterValueRange.min,
@@ -40,9 +40,9 @@ export default class ShootingGraph extends Component {
 
         return (
             <>
-                <text x={xValue} y="5" textAnchor="middle" className="font-sans font-light text-svg-xs">{distanceString}</text>
-                <text x={xValue} y={rearShooterHeight} textAnchor="middle" className="font-sans font-medium text-svg-s">{shooterMap[distanceString][0]}</text>
-                <text x={xValue} y={frontShooterHeight} textAnchor="middle" className="font-sans font-thin text-svg-xs">{shooterMap[distanceString][1]}</text>
+                <text x={xValue} y="5" textAnchor="middle" className="font-sans font-light text-svg-xxs">{distanceString}</text>
+                <text x={xValue} y={rearShooterHeight} textAnchor="middle" className="font-sans font-medium text-svg-xxs">{shooterMap[distanceString][0]}</text>
+                <text x={xValue} y={frontShooterHeight} textAnchor="middle" className="font-sans font-thin text-svg-xxs">{shooterMap[distanceString][1]}</text>
             </>
         )
     }
@@ -53,6 +53,8 @@ export default class ShootingGraph extends Component {
         } catch (error) {
             this.value = {}
         }
+
+        // this.value = JSON.parse(this.rawTestValue)
 
         this.shooterValueRange = this.calculateShooterValueRange(this.value)
 

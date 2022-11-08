@@ -5,6 +5,7 @@ module.exports = {
   darkMode: false,
   theme: {
     fontSize: {
+      'svg-xxs': '.30rem',
       'svg-xs': '.40rem',
       'svg-s': '.43rem',
       'xs': '.75rem',
