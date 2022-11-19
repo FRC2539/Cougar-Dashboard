@@ -1,16 +1,7 @@
-const { contextBridge } = require('electron')
+const { contextBridge, ipcRenderer } = require('electron')
 
-// Setup a persistent store
-const Store = require("electron-store")
-
-const schema = {
-	team: {
-		type: "string"
-	}
-}
-
-const store = new Store({schema})
-
-contextBridge.exposeInMainWorld("config", {
-  teamNumber: store.get("team", "2539")
+contextBridge.exposeInMainWorld("api", {
+  getTeamNumber: () => ipcRenderer.invoke("get-team-number"),
+  setWindowTitle: (title) => ipcRenderer.send("set-title", title),
+  handleConnect: (callback) => ipcRenderer.on("connect", (_, mode) => callback(mode))
 })

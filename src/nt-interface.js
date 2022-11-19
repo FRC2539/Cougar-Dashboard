@@ -6,6 +6,8 @@ export const createNetworkTablesInterface = (
 
     let tempNT = {}
 
+    let host = ""
+
     const keyIsBlacklisted = (key) => blacklist.includes(key)
 
     const setNetworkTables = (nt) => tempNT = nt
@@ -132,23 +134,46 @@ export const createNetworkTablesInterface = (
     const keys = () => NetworkTables.getKeys()
     
     const initializeNetworkTables = () => {
-        NetworkTables.addWsConnectionListener((connected) => {
+        NetworkTables.addWsConnectionListener(async (connected) => {
             console.log("Websocket connected: " + connected)
 
-            // Get the team number, which is exposed by the context bridge in preload.js
-            const teamNumber = window.config.teamNumber
-
-            NetworkTables.connect(`roborio-${teamNumber}-frc.local`)
+            NetworkTables.connect(host)
         }, true)
 
-        NetworkTables.addRobotConnectionListener((connected) => {
+        NetworkTables.addRobotConnectionListener(async (connected) => {
             console.log("Robot connected: " + connected)
 
-            if(!connected) return
+            if(!connected) {
+                // Get the team number, which is exposed by the context bridge in preload.js
+                const teamNumber = await window.api.getTeamNumber()
+                if (host === "") host = `roborio-${teamNumber}-frc.local`
+
+                window.api.setWindowTitle(`Connecting to ${host} ...`)
+
+                return
+            }
+
+            window.api.setWindowTitle(`Connected to ${host}`)
 
             populateNetworkTableFromKeys(keys())
             populateNTMapFromKeys(keys())
         }, true)
+
+        window.api.handleConnect(async (mode) => {
+            switch (mode) {
+                case "robot":
+                    const teamNumber = await window.api.getTeamNumber()
+                    host = `roborio-${teamNumber}-frc.local`
+
+                    NetworkTables.connect(host)
+                    break;
+                case "simulation":
+                    host = "localhost"
+
+                    NetworkTables.connect(host)
+                    break;
+            }
+        })
 
         // Update the local network table every time the network tables changes
         NetworkTables.addGlobalListener((key, value) => {
