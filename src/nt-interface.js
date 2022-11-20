@@ -1,29 +1,86 @@
-import "./libraries/networktables.js"
-import testData from "./test.js"
+import { NT4_Client } from "./libraries/nt4.ts"
 
 export const createNetworkTablesInterface = (
-    {getNetworkTablesState, setNetworkTablesState, setNTMapState, getNTMapState, usingTestData, blacklist}) => {
+    {setTableAndMapState, blacklist}) => {
 
     let tempNT = {}
+    let tempMap = new Map()
+
+    let host = ""
+
+    let client = null
+
+    const resetInternalState = () => {
+        tempNT = {}
+        tempMap = new Map()
+    }
+
+    const connect = () => {
+        client?.disconnect()
+
+        client = new NT4_Client(host, "Cougar-Dashboard", 
+            (topic) => {
+                // Topic Announce
+                client.publishTopic(topic.name, topic.type)
+            },
+            (topic) => {
+                // Topic Unannounce
+                client.unpublishTopic(topic.name)
+            },
+            (topic, timestamp_us, value) => {
+                // New Data
+                setKey(topic.name, value)
+                setNTMapKey(topic.name, value)
+            },
+            () => {
+                // On Connect
+                window.api.setWindowTitle(`Connected to ${host}`)
+
+                resetInternalState()
+            },
+            () => {
+                // On Disconnect
+                window.api.setWindowTitle(`Waiting for connection to ${host}`)
+            }
+        )
+
+        client.connect()
+        
+        client.subscribe(["/"], true, true, 0)
+    }
+
+    const initializeNetworkTables = async () => {
+        const teamNumber = await window.api.getTeamNumber()
+        if (host === "") host = `roborio-${teamNumber}-frc.local`
+
+        connect()
+
+        window.api.handleConnect(async (mode) => {
+            switch (mode) {
+                case "robot":
+                    const teamNumber = await window.api.getTeamNumber()
+                    host = `roborio-${teamNumber}-frc.local`                    
+                    break;
+                case "simulation":
+                    host = "localhost"
+                    break;
+            }
+
+            connect()
+        })
+
+        setInterval(() => {
+            setTableAndMapState(tempNT, tempMap)
+        }, 100)
+    }
+
+    const initialize = () => {
+        initializeNetworkTables()
+    }
 
     const keyIsBlacklisted = (key) => blacklist.includes(key)
 
-    const setNetworkTables = (nt) => tempNT = nt
     const getNetworkTables = () => tempNT
-
-    const populateNetworkTableFromKeys = (keys) => {
-        const nt = {}
-
-        for(const key of keys) {
-            const {header, _} = getHeader(key)
-
-            if(keyIsBlacklisted(header)) continue
-            
-            nt[key] = NetworkTables.getValue(key)
-        }
-
-        setNetworkTables(nt)
-    }
 
     const getHeader = (key) => {
         const path = key.split("/")
@@ -33,65 +90,18 @@ export const createNetworkTablesInterface = (
         return {header, subkey}
     }
 
-    const populateNTMapFromKeys = (keys) => {
-        const data = new Map()
-
-        for(const key of keys) {
-            const {header, subkey} = getHeader(key)
-
-            if(keyIsBlacklisted(header)) continue
-
-            if(!data.has(header)) data.set(header, new Map())
-
-            const keysMap = data.get(header)
-
-            const keyValue = NetworkTables.getValue(key)
-
-
-            keysMap.set(subkey, keyValue)
-        }
-
-        setNTMapState(data)
-    }
-
-    const createTestNTMap = (testData) => {
-        const data = new Map()
-
-        for(const [key, value] of Object.entries(testData)) {
-            const {header, subkey} = getHeader(key)
-
-            if(!data.has(header)) data.set(header, new Map())
-
-            const keysMap = data.get(header)
-
-            keysMap.set(subkey, value)
-        }
-
-        return data
-    }
-
     const setNTMapKey = (key, value) => {
-        if(keyIsBlacklisted(key)) return 
-
-        const data = getNTMapState()
+        const data = tempMap
 
         const {header, subkey} = getHeader(key)
+
+        if(keyIsBlacklisted(header)) return 
 
         if(!data.has(header)) data.set(header, new Map())
 
         const keysMap = data.get(header)
 
         keysMap.set(subkey, value)
-
-        setNTMapState(data)
-    }
-
-    const setStateKey = (key, value) => {
-        const nt = getNetworkTables()
-
-        nt[key] = value
-
-        setNetworkTables(nt)
     }
 
     const setKey = (key, value) => {
@@ -99,7 +109,9 @@ export const createNetworkTablesInterface = (
 
         if(keyIsBlacklisted(header)) return 
 
-        setStateKey(key, value)
+        const nt = getNetworkTables()
+
+        nt[key] = value
     }
 
     const putValue = (key, value) => {
@@ -107,87 +119,9 @@ export const createNetworkTablesInterface = (
 
         if(keyIsBlacklisted(header)) return 
 
-        if(usingTestData) {
-            setKey(key, value)
-
-            return
-        }
-
-        NetworkTables.putValue(key, value) 
-    }
-
-    const initializeTestData = () => {
-        setNetworkTables(testData)
-
-        const testMap = createTestNTMap(testData)
-
-        setNTMapState(testMap)
-
-        // Mimic the continuous updates from live data
-        setInterval(() => {
-            setNetworkTablesState(tempNT)
-        }, 250) 
+        client.addSample(key, value)
+        setKey(key, value)
     }
     
-    const keys = () => NetworkTables.getKeys()
-    
-    const initializeNetworkTables = () => {
-        NetworkTables.addWsConnectionListener((connected) => {
-            console.log("Websocket connected: " + connected)
-
-            // Get the team number, which is exposed by the context bridge in preload.js
-            const teamNumber = window.config.teamNumber
-
-            NetworkTables.connect(`roborio-${teamNumber}-frc.local`)
-        }, true)
-
-        NetworkTables.addRobotConnectionListener((connected) => {
-            console.log("Robot connected: " + connected)
-
-            if(!connected) return
-
-            populateNetworkTableFromKeys(keys())
-            populateNTMapFromKeys(keys())
-        }, true)
-
-        // Update the local network table every time the network tables changes
-        NetworkTables.addGlobalListener((key, value) => {
-            setKey(key, value)
-        }, true)
-        
-        // Update the stateful network tables object every 250 ms
-        setInterval(() => {
-            const lastState = getNetworkTablesState()
-
-            setNetworkTablesState(tempNT)
-
-            // Update the debugging page map if keys are added or removed
-            if(Object.keys(lastState).length != Object.keys(tempNT).length) {
-                populateNTMapFromKeys(keys())
-            }
-        }, 250) 
-    }
-
-    const useNetworkTables = () => {
-        usingTestData = false
-        
-        initializeNetworkTables()
-    }
-
-    const useTestData = () => {
-        usingTestData = true
-
-        initializeTestData()
-    }
-
-    const initialize = () => {
-        if(usingTestData) initializeTestData()
-        else initializeNetworkTables()
-    }
-
-    const getJSON = () => {
-        return JSON.stringify(getNetworkTables())
-    }
-    
-    return { initialize, putValue, useTestData, useNetworkTables, getJSON }
+    return { initialize, putValue }
 }

@@ -1,6 +1,6 @@
 const electron = require("electron")
 
-const { app, BrowserWindow } = electron
+const { app, BrowserWindow, ipcMain, Menu } = electron
 
 const { exec, execFile } = require("child_process")
 
@@ -26,12 +26,13 @@ const schema = {
 
 const store = new Store({schema})
 
+
 app.on("ready", () => {
 	createWindow()
 
-	if (process.platform != "win32" || ALWAYS_USE_PYTHON)
-		pythonServer = startPythonServer()
-	else pythonServer = startExecutableServer()
+	// if (process.platform != "win32" || ALWAYS_USE_PYTHON)
+	// 	pythonServer = startPythonServer()
+	// else pythonServer = startExecutableServer()
 })
 
 app.on("window-all-closed", () => {
@@ -73,6 +74,127 @@ function createWindow() {
 	mainWindow.on("page-title-updated", function (e) {
 		e.preventDefault()
 	})
+
+	ipcMain.on("set-title", (event, title) => {
+		const webContents = event.sender
+		const win = BrowserWindow.fromWebContents(webContents)
+		win.setTitle(title)
+	})
+
+	ipcMain.handle("get-team-number", async (event, args) => {
+		return await store.get("team", "2539")
+	})
+
+	if (isDev) mainWindow.webContents.openDevTools()
+
+	const isMac = process.platform === 'darwin'
+
+	const template = [
+		...(isMac ? [{
+		  label: app.name,
+		  submenu: [
+			{ role: 'about' },
+			{ type: 'separator' },
+			{ role: 'services' },
+			{ type: 'separator' },
+			{ role: 'hide' },
+			{ role: 'hideOthers' },
+			{ role: 'unhide' },
+			{ type: 'separator' },
+			{ role: 'quit' }
+		  ]
+		}] : []),
+		{
+		  label: 'Config',
+		  submenu: [
+			{
+			  click: () => mainWindow.webContents.send("connect", "robot"),
+			  label: 'Connect to robot (see config file)',
+			},
+			{
+			  click: () => mainWindow.webContents.send("connect", "simulation"),
+			  label: 'Connect to simulation',
+			}
+		]
+		},
+		{
+		  label: 'File',
+		  submenu: [
+			isMac ? { role: 'close' } : { role: 'quit' }
+		  ]
+		},
+		{
+		  label: 'Edit',
+		  submenu: [
+			{ role: 'undo' },
+			{ role: 'redo' },
+			{ type: 'separator' },
+			{ role: 'cut' },
+			{ role: 'copy' },
+			{ role: 'paste' },
+			...(isMac ? [
+			  { role: 'pasteAndMatchStyle' },
+			  { role: 'delete' },
+			  { role: 'selectAll' },
+			  { type: 'separator' },
+			  {
+				label: 'Speech',
+				submenu: [
+				  { role: 'startSpeaking' },
+				  { role: 'stopSpeaking' }
+				]
+			  }
+			] : [
+			  { role: 'delete' },
+			  { type: 'separator' },
+			  { role: 'selectAll' }
+			])
+		  ]
+		},
+		{
+		  label: 'View',
+		  submenu: [
+			{ role: 'reload' },
+			{ role: 'forceReload' },
+			{ role: 'toggleDevTools' },
+			{ type: 'separator' },
+			{ role: 'resetZoom' },
+			{ role: 'zoomIn' },
+			{ role: 'zoomOut' },
+			{ type: 'separator' },
+			{ role: 'togglefullscreen' }
+		  ]
+		},
+		{
+		  label: 'Window',
+		  submenu: [
+			{ role: 'minimize' },
+			{ role: 'zoom' },
+			...(isMac ? [
+			  { type: 'separator' },
+			  { role: 'front' },
+			  { type: 'separator' },
+			  { role: 'window' }
+			] : [
+			  { role: 'close' }
+			])
+		  ]
+		},
+		{
+		  role: 'help',
+		  submenu: [
+			{
+			  label: 'Learn More',
+			  click: async () => {
+				const { shell } = require('electron')
+				await shell.openExternal('https://electronjs.org')
+			  }
+			}
+		  ]
+		}
+	  ]
+	
+	Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 }
 
 function executeCommand(command) {
