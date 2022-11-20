@@ -14,7 +14,7 @@ export default class Debug extends Component {
     const html = this.dataToHTML(this.props.ntMap);
     let body = <></>;
     if (html.length != 0) {
-      let body = (
+      body = (
         <div className="bg-gray h-full py-3 px-4">
           <div className="h-full overflow-y-auto overflow-x-hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-2">
             {html}

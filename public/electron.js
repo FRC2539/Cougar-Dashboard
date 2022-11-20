@@ -30,9 +30,9 @@ const store = new Store({schema})
 app.on("ready", () => {
 	createWindow()
 
-	if (process.platform != "win32" || ALWAYS_USE_PYTHON)
-		pythonServer = startPythonServer()
-	else pythonServer = startExecutableServer()
+	// if (process.platform != "win32" || ALWAYS_USE_PYTHON)
+	// 	pythonServer = startPythonServer()
+	// else pythonServer = startExecutableServer()
 })
 
 app.on("window-all-closed", () => {

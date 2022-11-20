@@ -1,4 +1,3 @@
-import "./libraries/networktables.js"
 import { createNetworkTablesInterface } from "./nt-interface.js"
 import { Component } from "preact"
 import Debug from "./debug"
@@ -19,11 +18,7 @@ export default class App extends Component {
         }
 
         this.ntInterface = createNetworkTablesInterface({
-            getNetworkTablesState: () => this.getNetworkTablesState(),
-            setNetworkTablesState: (nt) => this.setNetworkTablesState(nt),
-            getNTMapState: () => this.getNTMapState(),
-            setNTMapState: (ntMap) => this.setNTMapState(ntMap),
-            usingTestData: false,
+            setTableAndMapState: (nt, ntMap) => this.setTableAndMapState(nt, ntMap),
             blacklist: ["LiveWindow"]
         })
 
@@ -42,20 +37,8 @@ export default class App extends Component {
         this.setState({page})
     }
 
-    getNetworkTablesState() {
-        return Object.assign({}, this.state.nt)
-    }
-
-    setNetworkTablesState(nt) {
-        this.setState({nt})
-    }
-
-    getNTMapState() {
-        return this.state.ntMap
-    }
-
-    setNTMapState(ntMap) {
-        this.setState({ntMap})
+    setTableAndMapState(nt, ntMap) {
+        this.setState({nt, ntMap})
     }
 
     componentDidMount() {
