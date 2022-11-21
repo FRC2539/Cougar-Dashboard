@@ -2,14 +2,8 @@ const electron = require("electron")
 
 const { app, BrowserWindow, ipcMain, Menu } = electron
 
-const { exec, execFile } = require("child_process")
-
 const path = require("path")
 const isDev = require("electron-is-dev")
-
-const ALWAYS_USE_PYTHON = false
-
-const PYTHON_SERVER_COMMAND = "python -m pynetworktables2js"
 
 let mainWindow = null
 
@@ -29,16 +23,10 @@ const store = new Store({schema})
 
 app.on("ready", () => {
 	createWindow()
-
-	// if (process.platform != "win32" || ALWAYS_USE_PYTHON)
-	// 	pythonServer = startPythonServer()
-	// else pythonServer = startExecutableServer()
 })
 
 app.on("window-all-closed", () => {
 	app.quit()
-
-	killPythonServer(pythonServer)
 })
 
 app.on("activate", () => {
@@ -67,6 +55,7 @@ function createWindow() {
 			: `file://${path.join(__dirname, "../build/index.html")}`
 	)
 
+	///////// Basic Window Events /////////
 	mainWindow.on("closed", function () {
 		mainWindow = null
 	})
@@ -75,6 +64,7 @@ function createWindow() {
 		e.preventDefault()
 	})
 
+	///////// Handle Events /////////
 	ipcMain.on("set-title", (event, title) => {
 		const webContents = event.sender
 		const win = BrowserWindow.fromWebContents(webContents)
@@ -87,6 +77,7 @@ function createWindow() {
 
 	if (isDev) mainWindow.webContents.openDevTools()
 
+	///////// Configure Menu /////////
 	const isMac = process.platform === 'darwin'
 
 	const template = [
@@ -187,7 +178,7 @@ function createWindow() {
 			  label: 'Learn More',
 			  click: async () => {
 				const { shell } = require('electron')
-				await shell.openExternal('https://electronjs.org')
+				await shell.openExternal('https://github.com/FRC2539/Cougar-Dashboard')
 			  }
 			}
 		  ]
@@ -195,72 +186,4 @@ function createWindow() {
 	  ]
 	
 	Menu.setApplicationMenu(Menu.buildFromTemplate(template))
-}
-
-function executeCommand(command) {
-	const process = exec(command, (error, stdout, stderr) => {
-		if (error) {
-			console.error(`exec error: ${error}`)
-			return
-		}
-
-		console.log(`stdout: ${stdout}`)
-		console.error(`stderr: ${stderr}`)
-	})
-
-	return process
-}
-
-function executeFile(file, args) {
-	const process = execFile(file, args, (error, stdout, stderr) => {
-		if (error) {
-			console.error(`exec error: ${error}`)
-			return
-		}
-
-		console.log(`stdout: ${stdout}`)
-		console.error(`stderr: ${stderr}`)
-	})
-
-	return process
-}
-
-function startPythonServer() {
-	// Start the pynetworktables2js server
-	const command = PYTHON_SERVER_COMMAND
-
-	// Ouput the current command being used
-	console.log(`Using: ${command} \n for pynetworktables2js`)
-
-	const serverProcess = executeCommand(command)
-
-	return serverProcess
-}
-
-function startExecutableServer() {
-	if(!store.has("team")) store.set("team", "2539")
-	
-	const teamNumber = store.get("team", "2539")
-
-	// Start the server
-	const file = `${path.join(__dirname, "../build/pynetworktables2js.exe")}`
-
-	const args = [`--team=${teamNumber}`]
-
-	// Ouput the current command being used
-	console.log(`Using: executable for pynetworktables2js`)
-
-	const serverProcess = executeFile(file, args)
-
-	return serverProcess
-}
-
-function killPythonServer(serverProcess) {
-	// Store the process ID of the python server
-	const pid = serverProcess.pid
-
-	console.log(`Python Server Process ID: ${pid}`)
-
-	// Try to kill the process
-	serverProcess.kill()
 }
