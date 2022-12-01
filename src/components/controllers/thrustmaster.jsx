@@ -1,5 +1,6 @@
 import { Component } from "preact";
 import splitNewLines from "./split-text";
+import imgUrl from '/thrustmaster-joystick.png'
 
 const POSITIONS = {
     trigger: {x: 779, y: 204},
@@ -55,7 +56,7 @@ constructor(props) {
         }
         return (
         <svg viewBox="0 0 960 720" className="bg-orange rounded-lg flex-initial p-1"> 
-            <image href="/thrustmaster-joystick.png"/>
+            <image href={imgUrl}/>
             { boxes }
         </svg>
         )

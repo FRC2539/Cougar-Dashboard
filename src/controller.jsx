@@ -1,6 +1,6 @@
 import { Component } from "preact";
-import LogitechController, { DefaultLogitechControllerData } from "./controllers/lojitech";
-import ThrustmasterJoystickController, { DefaultThrustmasterJoystickControllerData } from "./controllers/thrustmaster";
+import LogitechController, { DefaultLogitechControllerData } from "./components/controllers/lojitech";
+import ThrustmasterJoystickController, { DefaultThrustmasterJoystickControllerData } from "./components/controllers/thrustmaster";
 
 function controllerType(type) {
     if (type == "LogitechController") return LogitechController
