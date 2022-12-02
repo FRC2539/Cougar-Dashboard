@@ -1,4 +1,5 @@
 // From https://github.com/Mechanical-Advantage/AdvantageScope
+// ^ an adaptation of a js client draft pr from wpilib
 
 import { serialize, deserialize } from "./msgpack.js";
 

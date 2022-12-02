@@ -49,7 +49,7 @@ export const createNetworkTablesInterface = (
         client.subscribe(["/"], true, true, 0)
     }
 
-    const initializeNetworkTables = async () => {
+    const initialize = async () => {
         const teamNumber = await window.api.getTeamNumber()
         if (host === "") host = `roborio-${teamNumber}-frc.local`
 
@@ -72,10 +72,6 @@ export const createNetworkTablesInterface = (
         setInterval(() => {
             setTableAndMapState(tempNT, tempMap)
         }, 100)
-    }
-
-    const initialize = () => {
-        initializeNetworkTables()
     }
 
     const keyIsBlacklisted = (key) => blacklist.includes(key)
