@@ -17,16 +17,14 @@ export default class Controller extends Component {
         this.controller2Key = '/Controllers/2'
     }
 
-
     render() {
-    this.controller0Data = this.props.nt[this.controller0Key] ?? DefaultThrustmasterJoystickControllerData
-    this.controller1Data = this.props.nt[this.controller1Key] ?? DefaultThrustmasterJoystickControllerData
-    this.controller2Data = this.props.nt[this.controller2Key] ?? DefaultLogitechControllerData
+        this.controller0Data = JSON.parse(this.props.nt[this.controller0Key]) ?? DefaultThrustmasterJoystickControllerData
+        this.controller1Data = JSON.parse(this.props.nt[this.controller1Key]) ?? DefaultThrustmasterJoystickControllerData
+        this.controller2Data = JSON.parse(this.props.nt[this.controller2Key]) ?? DefaultLogitechControllerData
 
-    this.controller0Type = controllerType(this.controller0Data.type)
-    this.controller1Type = controllerType(this.controller1Data.type)
-    this.controller2Type = controllerType(this.controller2Data.type)
-
+        this.controller0Type = controllerType(this.controller0Data.type)
+        this.controller1Type = controllerType(this.controller1Data.type)
+        this.controller2Type = controllerType(this.controller2Data.type)
 
         return (
             <div className="flex flex-row items-center justify-between h-screen w-screen gap-3 p-2">
