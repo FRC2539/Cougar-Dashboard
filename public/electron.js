@@ -1,13 +1,11 @@
 const electron = require("electron")
-
+const { Client } = require('ssh2');
 const { app, BrowserWindow, ipcMain, Menu } = electron
 
 const path = require("path")
 const isDev = require("electron-is-dev")
 
 let mainWindow = null
-
-let pythonServer
 
 // Setup a persistent store
 const Store = require("electron-store")
@@ -18,7 +16,7 @@ const schema = {
 	}
 }
 
-const store = new Store({schema})
+const store = new Store({ schema })
 
 
 app.on("ready", () => {
@@ -75,6 +73,29 @@ function createWindow() {
 		return await store.get("team", "2539")
 	})
 
+	ipcMain.handle('list-directory', async (event, args) => {
+		let sshConnection = new Client()
+
+		sshConnection.on("ready", () => {
+				console.log('at least its ready')
+				sshConnection.sftp((err, sftp) => {
+					if (err) throw err;
+					sftp.readdir(args, (err, list) => {
+						if (err) throw err;
+						console.dir(list)
+						sshConnection.end()
+					})
+				});
+			}).connect({
+				host: "10.0.0.251",
+				username: "pi",
+				password: "raspberry"
+			})		
+
+		
+		console.log('logging yet again' + theActualResults)
+	})
+
 	if (isDev) mainWindow.webContents.openDevTools()
 
 	///////// Configure Menu /////////
@@ -82,108 +103,151 @@ function createWindow() {
 
 	const template = [
 		...(isMac ? [{
-		  label: app.name,
-		  submenu: [
-			{ role: 'about' },
-			{ type: 'separator' },
-			{ role: 'services' },
-			{ type: 'separator' },
-			{ role: 'hide' },
-			{ role: 'hideOthers' },
-			{ role: 'unhide' },
-			{ type: 'separator' },
-			{ role: 'quit' }
-		  ]
+			label: app.name,
+			submenu: [
+				{ role: 'about' },
+				{ type: 'separator' },
+				{ role: 'services' },
+				{ type: 'separator' },
+				{ role: 'hide' },
+				{ role: 'hideOthers' },
+				{ role: 'unhide' },
+				{ type: 'separator' },
+				{ role: 'quit' }
+			]
 		}] : []),
 		{
-		  label: 'Config',
-		  submenu: [
-			{
-			  click: () => mainWindow.webContents.send("connect", "robot"),
-			  label: 'Connect to robot (see config file)',
-			},
-			{
-			  click: () => mainWindow.webContents.send("connect", "simulation"),
-			  label: 'Connect to simulation',
-			}
-		]
+			label: 'Config',
+			submenu: [
+				{
+					click: () => mainWindow.webContents.send("connect", "robot"),
+					label: 'Connect to robot (see config file)',
+				},
+				{
+					click: () => mainWindow.webContents.send("connect", "simulation"),
+					label: 'Connect to simulation',
+				}
+			]
 		},
 		{
-		  label: 'File',
-		  submenu: [
-			isMac ? { role: 'close' } : { role: 'quit' }
-		  ]
+			label: 'Debug',
+			submenu: [
+				{
+					label: 'Download debug logs',
+					click: (menuItem, browserWindow) => downloadLogs(menuItem, browserWindow)
+				}
+			]
 		},
 		{
-		  label: 'Edit',
-		  submenu: [
-			{ role: 'undo' },
-			{ role: 'redo' },
-			{ type: 'separator' },
-			{ role: 'cut' },
-			{ role: 'copy' },
-			{ role: 'paste' },
-			...(isMac ? [
-			  { role: 'pasteAndMatchStyle' },
-			  { role: 'delete' },
-			  { role: 'selectAll' },
-			  { type: 'separator' },
-			  {
-				label: 'Speech',
-				submenu: [
-				  { role: 'startSpeaking' },
-				  { role: 'stopSpeaking' }
-				]
-			  }
-			] : [
-			  { role: 'delete' },
-			  { type: 'separator' },
-			  { role: 'selectAll' }
-			])
-		  ]
+			label: 'File',
+			submenu: [
+				isMac ? { role: 'close' } : { role: 'quit' }
+			]
 		},
 		{
-		  label: 'View',
-		  submenu: [
-			{ role: 'reload' },
-			{ role: 'forceReload' },
-			{ role: 'toggleDevTools' },
-			{ type: 'separator' },
-			{ role: 'resetZoom' },
-			{ role: 'zoomIn' },
-			{ role: 'zoomOut' },
-			{ type: 'separator' },
-			{ role: 'togglefullscreen' }
-		  ]
+			label: 'Edit',
+			submenu: [
+				{ role: 'undo' },
+				{ role: 'redo' },
+				{ type: 'separator' },
+				{ role: 'cut' },
+				{ role: 'copy' },
+				{ role: 'paste' },
+				...(isMac ? [
+					{ role: 'pasteAndMatchStyle' },
+					{ role: 'delete' },
+					{ role: 'selectAll' },
+					{ type: 'separator' },
+					{
+						label: 'Speech',
+						submenu: [
+							{ role: 'startSpeaking' },
+							{ role: 'stopSpeaking' }
+						]
+					}
+				] : [
+					{ role: 'delete' },
+					{ type: 'separator' },
+					{ role: 'selectAll' }
+				])
+			]
 		},
 		{
-		  label: 'Window',
-		  submenu: [
-			{ role: 'minimize' },
-			{ role: 'zoom' },
-			...(isMac ? [
-			  { type: 'separator' },
-			  { role: 'front' },
-			  { type: 'separator' },
-			  { role: 'window' }
-			] : [
-			  { role: 'close' }
-			])
-		  ]
+			label: 'View',
+			submenu: [
+				{ role: 'reload' },
+				{ role: 'forceReload' },
+				{ role: 'toggleDevTools' },
+				{ type: 'separator' },
+				{ role: 'resetZoom' },
+				{ role: 'zoomIn' },
+				{ role: 'zoomOut' },
+				{ type: 'separator' },
+				{ role: 'togglefullscreen' }
+			]
 		},
 		{
-		  role: 'help',
-		  submenu: [
-			{
-			  label: 'Learn More',
-			  click: async () => {
-				const { shell } = require('electron')
-				await shell.openExternal('https://github.com/FRC2539/Cougar-Dashboard')
-			  }
-			}
-		  ]
+			label: 'Window',
+			submenu: [
+				{ role: 'minimize' },
+				{ role: 'zoom' },
+				...(isMac ? [
+					{ type: 'separator' },
+					{ role: 'front' },
+					{ type: 'separator' },
+					{ role: 'window' }
+				] : [
+					{ role: 'close' }
+				])
+			]
+		},
+		{
+			role: 'help',
+			submenu: [
+				{
+					label: 'Learn More',
+					click: async () => {
+						const { shell } = require('electron')
+						await shell.openExternal('https://github.com/FRC2539/Cougar-Dashboard')
+					}
+				}
+			]
 		}
-	  ]
-	
+	]
+
 	Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 }
+
+// Log downloader stuff
+
+var downloadWindow = null
+const downloadLogs = (menuItem, window) => {
+	if (downloadWindow) {
+		downloadWindow.focus()
+		return
+	}
+
+	downloadWindow = new BrowserWindow({
+		height: 300,
+		resizable: false,
+		width: 600,
+		title: 'Logs Downloader',
+		minimizable: true,
+		fullscreenable: false,
+		autoHideMenuBar: true,
+		webPreferences: {
+			preload: `${path.join(__dirname, "./preload.js")}`
+		}
+	})
+
+	downloadWindow.loadURL(
+		isDev
+			? "http://localhost:3000/log-downloader.html"
+			: `file://${path.join(__dirname, "../build/log-downloader.html")}`
+	)
+
+	downloadWindow.on('closed', function () {
+		downloadWindow = null
+	})
+}
+
