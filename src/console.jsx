@@ -19,5 +19,5 @@ export default class Console extends Component {
                 </div>
             </div>
         )
-    }
+    }  
 }

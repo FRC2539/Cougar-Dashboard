@@ -1,6 +1,7 @@
 import { createNetworkTablesInterface } from "./nt-interface.js"
 import { Component } from "preact"
 import Debug from "./debug"
+import DebugTest from "./debug-test"
 import Home from "./home"
 import Console from "./console"
 import Field from "./field"
@@ -14,7 +15,7 @@ export default class App extends Component {
         this.state = {
             nt: {},
             ntMap: new Map(),
-            page: "home"
+            page: "debug-test"
         }
 
         this.ntInterface = createNetworkTablesInterface({
@@ -25,6 +26,7 @@ export default class App extends Component {
         this.pages = [
             "home",
             "debug",
+            "debug-test",
             "console",
             "field",
             "controller"
@@ -51,6 +53,7 @@ export default class App extends Component {
                 {
                     {
                         "home": <Home nt={this.state.nt} putValueNT={this.ntInterface.putValue} />,
+                        "debug-test": <DebugTest ntMap={this.state.ntMap} nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>,
                         "debug": <Debug ntMap={this.state.ntMap} nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>,
                         "console": <Console nt={this.state.nt}/>,
                         "field": <Field nt={this.state.nt}/>,
