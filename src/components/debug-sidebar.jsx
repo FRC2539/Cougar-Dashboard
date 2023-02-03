@@ -16,10 +16,10 @@ export default class DebugSidebar extends Component {
         }
 
         return (
-        <div className="col-1 shadow h-full max-h-screen bg-orange rounded-lg p-2">
+        <div className="col-1 shadow bg-orange rounded-lg p-2" style={"max-height: 95vh;"}>
             <h2 className="font-main text-lg font-medium tracking-wider mb-0.5">Debug 2.0</h2>
             <hr />
-            <div className="overflow-auto h-full max-h-full">
+            <div className="overflow-x-hidden overflow-y-auto relative" style={"height: 90%;"}>
                 {html}
             </div>
         </div>
