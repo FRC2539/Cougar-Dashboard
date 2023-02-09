@@ -50,7 +50,7 @@ export default class App extends Component {
             <span>
                 {
                     {
-                        "home": <Home nt={this.state.nt} putValueNT={this.ntInterface.putValue} />,
+                        "home": <Home nt={this.state.nt} ntMap={this.state.ntMap} putValueNT={this.ntInterface.putValue} />,
                         "debug": <Debug ntMap={this.state.ntMap} nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>,
                         "console": <Console nt={this.state.nt}/>,
                         "field": <Field nt={this.state.nt}/>,

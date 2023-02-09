@@ -31,7 +31,6 @@ export default class Autos extends Component {
         })
     }
 
-
     render() {
         let buttonHTML = this.getButtonHTML()
         let body = <></>
