@@ -1,7 +1,7 @@
 {
   "name": "Cougar-Dashboard",
   "author": "FRC Team 2539",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "main": "public/electron.js",
   "scripts": {
     "dev": "vite",
