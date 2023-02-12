@@ -4,59 +4,63 @@ export default class Mechanisms extends Component {
     constructor(props) {
         super(props)
 
-        this.shooterRPM1 = "/Shooter/Shooter RPM"
-        this.shooterRPM2 = "/Shooter/Shooter RPM2"
+        this.driveTemperaturesKey = "/SwerveDriveSubsystem/Drive Temperatures"
 
-        this.hoodPosition = "/Hood/Hood Position"
+        // this.shooterRPM1 = "/Shooter/Shooter RPM"
+        // this.shooterRPM2 = "/Shooter/Shooter RPM2"
 
-        this.conveyorBall = "/BallSystem/Conveyor Ball"
-        this.chamberBall = "/BallSystem/Chamber Ball"
+        // this.hoodPosition = "/Hood/Hood Position"
 
-        this.mechanisms = {
-            "ML Target": "/ML/targetAcquired"
+        // this.conveyorBall = "/BallSystem/Conveyor Ball"
+        // this.chamberBall = "/BallSystem/Chamber Ball"
+
+        // this.mechanisms = {
+        //     "ML Target": "/ML/targetAcquired"
+        // }
+    }
+
+    average(array) {
+        let sum = 0;
+
+        for (const value of array) {
+            sum += value
         }
+
+        return sum / array.length
     }
 
     render() {
+        const driveMotorTemps = this.props.nt[this.driveTemperaturesKey] ?? []
+        const averageMotorTemp = this.average(driveMotorTemps)
+        const motorTempThreshold = 70;
+
         return (
             <div className="shadow bg-orange col-span-4 row-span-2 rounded-lg p-2 mt-1">
-                <div className="flex flex-row font-medium justify-between items-center">
-                    <div className="text-left self-start">RPM1:</div>
-                    <div className="text-right self-end">{Math.round(this.props.nt[this.shooterRPM1])}</div>
-                </div>
-                <div className="flex flex-row font-medium justify-between items-center">
-                    <div className="text-left self-start">RPM2:</div>
-                    <div className="text-right self-end">{Math.round(this.props.nt[this.shooterRPM2])}</div>
-                </div>
+                <p className="text-lg font-bold mb-1">General Mechanisms</p>
 
-                <hr/>
+                <hr className="mb-2"></hr>
 
-                <div className="flex flex-row font-medium justify-between items-center">
-                    <div className="text-left self-start">Hood Position:</div>
-                    <div className="text-right self-end">{Math.round(this.props.nt[this.hoodPosition])}</div>
+                <div className="flex flex-row font-medium justify-between items-center mb-2">
+                    <div className="text-left self-start">Swerve Temperatures:</div>
+                    <div className={"text-right w-1/4 h-7 rounded-md border-black border " + (averageMotorTemp > motorTempThreshold ? "bg-red" : "bg-black")}></div>
                 </div>
 
-                <hr/>
+                <div className="flex flex-row font-medium justify-between items-center mb-2">
+                    <div className="text-left self-start">Has Game Piece:</div>
+                    <div className={"text-right w-1/4 h-7 rounded-md border-black border " + (false ? "bg-green" : " bg-black")}></div>
+                </div>
 
-                {Object.entries(this.mechanisms).map(([key, value]) => {
-                    return (
-                        <div className="flex flex-row font-medium justify-between items-center mb-0.5">
-                            <div className="text-left self-start">{key}:</div>
-                            <div className={"text-right self-end w-1/5 h-4 rounded-full border-black border " + (this.props.nt[value] == true ? " bg-green" : " bg-red")}></div>
-                        </div>
-                    )
-                })}
+                <div className="flex flex-row font-medium justify-between items-center mb-2">
+                    <div className="text-left self-start">Is Under Pressure:</div>
+                    <div className={"text-right w-1/4 h-7 rounded-md border-black border " + (false ? "bg-purple" : " bg-black")}></div>
+                </div>
 
-                <hr/>
+                <hr className="mb-2"></hr>
 
-                {/* <div className="flex flex-row font-medium justify-center items-center mt-3">
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="4" fill={(this.props.nt[this.conveyorBall])? "orange" : "black"}/>
-                    </svg>
-                    <svg viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="40" stroke="black" stroke-width="4" fill={(this.props.nt[this.chamberBall])? "orange" : "black"}/>
-                    </svg>
-                </div> */}
+                <div className="flex flex-row font-medium justify-between items-center mb-2">
+                    <div className="text-left self-start">Vision Updated:</div>
+                    <div className="text-right self-end">0 seconds ago</div>
+                </div>
             </div>
         )
     }

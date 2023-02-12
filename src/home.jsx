@@ -1,10 +1,8 @@
 import { Component } from "preact"
 
-import LimelightFeed from "./components/limelight"
-import IntakeCameraFeed from "./components/intakecamera"
+import CameraFeed from "./components/camerafeed"
 import Mechanisms from "./components/mechanisms"
 import Robot from "./components/robot"
-import Autos from "./components/autos"
 import ConfigurableAutos from "./components/configurable-autos"
 
 export default class Home extends Component {
@@ -20,10 +18,10 @@ export default class Home extends Component {
                     <ConfigurableAutos nt={this.props.nt} ntMap={this.props.ntMap} putValueNT={this.props.putValueNT}/>
                 </div>
                 <div className="col-span-6 flex flex-row justify-around p-3">
-                    <IntakeCameraFeed nt={this.props.nt}/>
+                    <CameraFeed cameraIP={"http://10.25.39.11:5800"}/>
                 </div>
                 <div className="col-span-3 flex flex-col justify-between p-3">
-                    <LimelightFeed nt={this.props.nt} putValueNT={this.props.putValueNT}/>
+                    <CameraFeed cameraIP={"http://photonvision.local:1181"}/>
                     <Robot nt={this.props.nt} /> 
                 </div>
             </div>

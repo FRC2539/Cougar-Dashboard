@@ -1,16 +1,16 @@
 import { Component } from "preact"
 
-export default class IntakeCameraFeed extends Component {
+export default class CameraFeed extends Component {
     constructor(props) {
         super(props)
 
-        this.webcamKey = "/ML/feed"
+        this.ip = this.props.cameraIP
     }
 
     render() {
         return (
             <div className="h-full w-full relative">
-                <img id="webcam-feed" className="max-h-full h-full m-auto" src={this.props.nt[this.webcamKey]} />
+                <img className="max-h-full h-full m-auto" src={this.ip} />
             </div>
         )
     }

@@ -51,6 +51,9 @@ module.exports = {
       },
       green: {
         DEFAULT: '#61FF00'
+      },
+      purple: {
+        DEFAULT: '#aa24f2'
       }
     },
     extend: {

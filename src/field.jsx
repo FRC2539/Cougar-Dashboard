@@ -3,17 +3,14 @@ import { Component } from "preact"
 const ROBOT_WIDTH = 0.762
 const FIELD_WIDTH = 16.4846
 const FIELD_HEIGHT = 8.1026
-const TARGET_RADIUS = 1.355852
 
 export default class Field extends Component {
     constructor(props) {
         super(props)
 
-        this.robotPoseKey = '/Swerve/robotPose'
+        this.robotPoseKey = '/SwerveDriveSubsystem/Pose'
         this.ghostPoseKey = '/Swerve/ghostPose'
         this.ghostEnableKey = '/Swerve/enableGhostPose'
-
-        this.pathPointsKey = '/Swerve/Trajectory'
     }
 
     decodeRobotPoseArray(poseArray) {
@@ -58,7 +55,6 @@ export default class Field extends Component {
 
                 <svg viewBox={`0 0 ${FIELD_WIDTH} ${FIELD_HEIGHT}`} className="w-4/6 max-h-3/4" transform="scale(1, -1)" >
                     <rect style="fill:black;" width={FIELD_WIDTH} height={FIELD_HEIGHT} />
-                    <circle stroke="white" stroke-width=".05" cx={FIELD_WIDTH / 2} cy={FIELD_HEIGHT / 2} r={TARGET_RADIUS} />
 
                     {this.createRobotSvg(this.robotPose, false)}
                     {ghostEnabled ? this.createRobotSvg(this.ghostPose, true) : <></>}
