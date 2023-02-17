@@ -1,3 +1,4 @@
+import { useDraggable } from "@dnd-kit/core";
 import { Component } from "preact";
 import DebugHeader from "./debug-header";
 
@@ -11,7 +12,10 @@ export default class DebugSidebar extends Component {
         const keys = []
 
         for (const [innerKey, _] of value) {
-            keys.push(<p className="mb-1 w-full flex flex-row justify-between flex-wrap cursor-pointer">- {innerKey}</p>)
+            const { attributes, listeners, setNodeRef, transform } = useDraggable({ id: `/${key}/${innerKey}` })
+            keys.push(
+                <p className="mb-1 w-full flex flex-row justify-between flex-wrap" ref={setNodeRef} key={innerKey} {...listeners} {...attributes}>- {innerKey}</p>
+            )
         }
 
         html.push(
@@ -36,13 +40,13 @@ export default class DebugSidebar extends Component {
         }
 
         return (
-        <div className="col-1 shadow bg-orange rounded-lg p-2" style={"max-height: 95vh;"}>
-            <h2 className="font-main text-lg font-medium tracking-wider mb-0.5">Debug 2.0</h2>
-            <hr />
-            <div className="overflow-x-hidden overflow-y-auto relative flex flex-col gap-1 mt-1" style={"height: 90%;"}>
-                {html}
+            <div className="col-1 shadow bg-orange rounded-lg p-2" style={"max-height: 95vh;"}>
+                <h2 className="font-main text-lg font-medium tracking-wider mb-0.5">Debug 2.0</h2>
+                <hr />
+                <div className="overflow-x-hidden overflow-y-auto relative flex flex-col gap-1 mt-1" style={"height: 90%;"}>
+                    {html}
+                </div>
             </div>
-        </div>
         )
     }
 }
