@@ -43,7 +43,7 @@ export default class DebugTest extends Component {
                         ) }
                     </DragOverlay>
                     <DebugSidebar ntMap={this.props.ntMap} nt={this.props.nt} />
-                    <DebugViewer ntMap={this.props.ntMap} nt={this.props.nt} putValueNt={this.props.putValueNt} activeKey={droppedKey}/>
+                    <DebugViewer ntMap={this.props.ntMap} nt={this.props.nt} putValueNt={this.props.putValueNt} activeKey={droppedKey} timestamp={this.props.timestamp}/>
                 </DndContext>
             </div>
         )
