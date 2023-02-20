@@ -13,13 +13,14 @@ export default class App extends Component {
         super()
 
         this.state = {
+            timestampSeconds: 0,
             nt: {},
             ntMap: new Map(),
             page: "debug-test"
         }
 
         this.ntInterface = createNetworkTablesInterface({
-            setTableAndMapState: (nt, ntMap) => this.setTableAndMapState(nt, ntMap),
+            setTableAndMapState: (nt, ntMap, timestamp) => this.setTableAndMapState(nt, ntMap, timestamp),
             blacklist: ["LiveWindow"]
         })
 
@@ -39,8 +40,8 @@ export default class App extends Component {
         this.setState({page})
     }
 
-    setTableAndMapState(nt, ntMap) {
-        this.setState({nt, ntMap})
+    setTableAndMapState(nt, ntMap, timestamp) {
+        this.setState({nt, ntMap, timestampSeconds: timestamp})
     }
 
     componentDidMount() {
@@ -53,7 +54,7 @@ export default class App extends Component {
                 {
                     {
                         "home": <Home nt={this.state.nt} putValueNT={this.ntInterface.putValue} />,
-                        "debug-test": <DebugTest ntMap={this.state.ntMap} nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>,
+                        "debug-test": <DebugTest ntMap={this.state.ntMap} nt={this.state.nt} putValueNT={this.ntInterface.putValue} timestamp={this.state.timestampSeconds}/>,
                         "debug": <Debug ntMap={this.state.ntMap} nt={this.state.nt} putValueNT={this.ntInterface.putValue}/>,
                         "console": <Console nt={this.state.nt}/>,
                         "field": <Field nt={this.state.nt}/>,

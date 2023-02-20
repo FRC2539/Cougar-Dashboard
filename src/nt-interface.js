@@ -3,6 +3,7 @@ import { NT4_Client } from "./libraries/nt4.ts"
 export const createNetworkTablesInterface = (
     {setTableAndMapState, blacklist}) => {
 
+    let tempTimestamp = 0 // Timestamp comes in microseconds, but we provide it in seconds
     let tempNT = {}
     let tempMap = new Map()
 
@@ -11,6 +12,7 @@ export const createNetworkTablesInterface = (
     let client = null
 
     const resetInternalState = () => {
+        tempTimestamp = 0
         tempNT = {}
         tempMap = new Map()
     }
@@ -31,6 +33,7 @@ export const createNetworkTablesInterface = (
                 // New Data
                 setKey(topic.name, value)
                 setNTMapKey(topic.name, value)
+                tempTimestamp = round(timestamp_us * 10e-7, 6)
             },
             () => {
                 // On Connect
@@ -70,8 +73,14 @@ export const createNetworkTablesInterface = (
         })
 
         setInterval(() => {
-            setTableAndMapState(tempNT, tempMap)
+            setTableAndMapState(tempNT, tempMap, tempTimestamp)
         }, 100)
+    }
+
+    const round = (num, decimalPlaces = 0) => {
+        var p = Math.pow(10, decimalPlaces);
+        var n = (num * p) * (1 + Number.EPSILON);
+        return Math.round(n) / p;
     }
 
     const keyIsBlacklisted = (key) => blacklist.includes(key)
