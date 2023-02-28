@@ -18,10 +18,10 @@ export default class Home extends Component {
                     <ConfigurableAutos nt={this.props.nt} ntMap={this.props.ntMap} putValueNT={this.props.putValueNT}/>
                 </div>
                 <div className="col-span-6 flex flex-row justify-around p-3">
-                    <CameraFeed cameraIP={"http://10.25.39.11:5800"}/>
+                    <CameraFeed cameraIP={"http://10.25.39.11:5800"} isThumbnail={false}/>
                 </div>
                 <div className="col-span-3 flex flex-col justify-between p-3">
-                    <CameraFeed cameraIP={"http://photonvision.local:1181"}/>
+                    <CameraFeed cameraIP={"http://photonvision.local:1182/stream.mjpg"} isThumbnail={true}/>
                     <Robot nt={this.props.nt} /> 
                 </div>
             </div>
