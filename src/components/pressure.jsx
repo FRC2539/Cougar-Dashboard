@@ -22,10 +22,10 @@ export default class Pressure extends Component {
                 <hr className="mb-2"></hr>
 
                 <div className="overflow-hidden h-8 relative mb-1 z-0 text-s flex rounded bg-white border-black border-2">
-                    <div style={{width: percentPressurized + "%"}} className="shadow-none flex flex-col text-left whitespace-nowrap text-white justify-center absolute inset-y-0 left-0 z-5 bg-purple">
+                    <div style={{width: percentPressurized + "%"}} className="shadow-none flex flex-col text-left whitespace-nowrap text-white justify-center absolute inset-y-0 left-0 z-1 bg-purple">
                         <p className="text-white pl-3">{Math.round(pressure) + " psi"}</p>
                     </div>
-                    <div style={{width: minPressurePercent + "%"}} className="shadow-none flex flex-col text-center whitespace-nowrap justify-center absolute inset-y-0 left-0 z-10 border-r-2 border-black"></div>
+                    <div style={{width: minPressurePercent + "%"}} className="shadow-none flex flex-col text-center whitespace-nowrap justify-center absolute inset-y-0 left-0 z-2 border-r-2 border-black"></div>
                 </div>
             </div>
         )
