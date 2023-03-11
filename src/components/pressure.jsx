@@ -20,7 +20,7 @@ export default class Pressure extends Component {
         
         return (
             <div className="shadow row-span-1 w-11/12 col-span-4 bg-orange rounded-lg p-1 mt-3 mb-3 grid grid-cols-1">
-                <p>Pressure</p>
+                <p className="text-lg font-bold mb-1">Pressure</p>
                 <hr className="mb-2"></hr>
 
                 <div className="overflow-hidden h-6 mb-4 text-xs flex rounded-full bg-white">
