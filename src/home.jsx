@@ -22,7 +22,7 @@ export default class Home extends Component {
                     <CameraFeed cameraIP={"http://10.25.39.11:5800"} isThumbnail={false}/>
                 </div>
                 <div className="col-span-3 flex flex-col justify-between p-3">
-                    <CameraFeed cameraIP={"http://photonvision.local:1182/stream.mjpg"} isThumbnail={true}/>
+                    <CameraFeed cameraIP={"http://10.25.39.12:5800"} isThumbnail={true}/>
                     <Pressure nt={this.props.nt} /> 
                 </div>
             </div>

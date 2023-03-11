@@ -11,24 +11,20 @@ export default class Pressure extends Component {
     }
 
     render() {
-        // const minPressure = this.props.nt[this.minPressureKey]
-        const minPressure = 80
-
-
-        // let pressure = this.props.nt[this.pressureKey]
-        let pressure = 100
-
-        let percentPressurized = Math.round((pressure/maxPressure) * 100)
-
-        let minPressurePercent = Math.round((minPressure/maxPressure) * 100)
+        const minPressure = this.props.nt[this.minPressureKey]
+        const pressure = this.props.nt[this.pressureKey]
+        const percentPressurized = (pressure/maxPressure) * 100
+        const minPressurePercent = (minPressure/maxPressure) * 100
         
         return (
             <div className="shadow row-span-1 w-11/12 col-span-4 bg-orange rounded-lg p-1 mt-3 mb-3 grid grid-cols-1">
                 <p className="text-lg font-bold mb-1">Pressure</p>
                 <hr className="mb-2"></hr>
 
-                <div className="overflow-hidden h-6 mb-4 relative z-0 text-xs flex rounded bg-white border-black border">
-                    <div style={{ width: percentPressurized + "%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-black justify-center absolute inset-y-0 left-0 z-5 bg-purple">{pressure + " psi"}</div>
+                <div className="overflow-hidden h-8 relative mb-1 z-0 text-s flex rounded bg-white border-black border-2">
+                    <div style={{width: percentPressurized + "%"}} className="shadow-none flex flex-col text-left whitespace-nowrap text-white justify-center absolute inset-y-0 left-0 z-5 bg-purple">
+                        <p className="text-white pl-3">{Math.round(pressure) + " psi"}</p>
+                    </div>
                     <div style={{width: minPressurePercent + "%"}} className="shadow-none flex flex-col text-center whitespace-nowrap justify-center absolute inset-y-0 left-0 z-10 border-r-2 border-black"></div>
                 </div>
             </div>
