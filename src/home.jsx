@@ -4,6 +4,7 @@ import CameraFeed from "./components/camerafeed"
 import Mechanisms from "./components/mechanisms"
 import Robot from "./components/robot"
 import ConfigurableAutos from "./components/configurable-autos"
+import Pressure from "./components/pressure"
 
 export default class Home extends Component {
     constructor(props) {
@@ -22,7 +23,7 @@ export default class Home extends Component {
                 </div>
                 <div className="col-span-3 flex flex-col justify-between p-3">
                     <CameraFeed cameraIP={"http://photonvision.local:1182/stream.mjpg"} isThumbnail={true}/>
-                    <Robot nt={this.props.nt} /> 
+                    <Pressure nt={this.props.nt} /> 
                 </div>
             </div>
         )

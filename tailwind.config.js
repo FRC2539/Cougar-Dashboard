@@ -53,7 +53,8 @@ module.exports = {
         DEFAULT: '#61FF00'
       },
       purple: {
-        DEFAULT: '#aa24f2'
+        DEFAULT: '#aa24f2',
+        light: '#EDC9F9'
       }
     },
     extend: {
