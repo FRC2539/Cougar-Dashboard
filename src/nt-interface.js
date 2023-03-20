@@ -51,7 +51,8 @@ export const createNetworkTablesInterface = (
 
     const initialize = async () => {
         const teamNumber = await window.api.getTeamNumber()
-        if (host === "") host = `roborio-${teamNumber}-frc.local`
+        // if (host === "") host = `roborio-${teamNumber}-frc.local`
+        if (host === "") host = `10.25.39.2`
 
         connect()
 
@@ -59,7 +60,8 @@ export const createNetworkTablesInterface = (
             switch (mode) {
                 case "robot":
                     const teamNumber = await window.api.getTeamNumber()
-                    host = `roborio-${teamNumber}-frc.local`                    
+                    // host = `roborio-${teamNumber}-frc.local`       
+                    host = `10.25.39.2`                    
                     break;
                 case "simulation":
                     host = "localhost"
