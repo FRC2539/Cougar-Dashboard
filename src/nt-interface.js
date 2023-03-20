@@ -49,10 +49,18 @@ export const createNetworkTablesInterface = (
         client.subscribe(["/"], true, true, 0)
     }
 
+    const convertTeamNumberToIP = (teamNumber) => {
+        const teamNumberString = `${teamNumber}`.padStart(4, "0")
+
+        const firstNumber = parseInt(teamNumberString.substring(0, 2))
+        const secondNumber = parseInt(teamNumberString.substring(2))
+
+        return `10.${firstNumber}.${secondNumber}.2`
+    }
+
     const initialize = async () => {
         const teamNumber = await window.api.getTeamNumber()
-        // if (host === "") host = `roborio-${teamNumber}-frc.local`
-        if (host === "") host = `10.25.39.2`
+        if (host === "") host = convertTeamNumberToIP(teamNumber)
 
         connect()
 
@@ -60,8 +68,7 @@ export const createNetworkTablesInterface = (
             switch (mode) {
                 case "robot":
                     const teamNumber = await window.api.getTeamNumber()
-                    // host = `roborio-${teamNumber}-frc.local`       
-                    host = `10.25.39.2`                    
+                    host = convertTeamNumberToIP(teamNumber)   
                     break;
                 case "simulation":
                     host = "localhost"
