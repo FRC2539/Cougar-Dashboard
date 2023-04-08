@@ -65,10 +65,14 @@ export const createNetworkTablesInterface = (
         connect()
 
         window.api.handleConnect(async (mode) => {
+            const teamNumber = await window.api.getTeamNumber()
+
             switch (mode) {
                 case "robot":
-                    const teamNumber = await window.api.getTeamNumber()
                     host = convertTeamNumberToIP(teamNumber)   
+                    break;
+                case "practice":
+                    host = `roborio-${teamNumber}-frc.local`
                     break;
                 case "simulation":
                     host = "localhost"

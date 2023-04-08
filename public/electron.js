@@ -103,6 +103,10 @@ function createWindow() {
 			  label: 'Connect to robot (see config file)',
 			},
 			{
+				click: () => mainWindow.webContents.send("connect", "practice"),
+				label: 'Connect to practice field',
+			},
+			{
 			  click: () => mainWindow.webContents.send("connect", "simulation"),
 			  label: 'Connect to simulation',
 			}
