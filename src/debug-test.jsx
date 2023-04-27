@@ -35,7 +35,7 @@ export default (props) => {
                         ) }
                     </DragOverlay>
                     <DebugSidebar ntMap={props.ntMap} nt={props.nt} />
-                    <DebugViewer ntMap={props.ntMap} nt={props.nt} putValueNt={props.putValueNt} activeKey={droppedKey}/>
+                    <DebugViewer ntMap={props.ntMap} nt={props.nt} putValueNt={props.putValueNt} activeKeys={droppedKeys}/>
                 </DndContext>
             </div>
         )
