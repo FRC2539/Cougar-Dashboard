@@ -7,7 +7,7 @@ const bound = function (number) {
     return Math.min(maxColor, Math.max(minColor, parseInt(number)))
 }
 
-export default class Pressure extends Component {
+export default class DriverstationLEDS extends Component {
     constructor(props) {
         super(props)
 
@@ -37,8 +37,13 @@ export default class Pressure extends Component {
             }
         )
 
+        const val1 = (1 << 6) | numbers[0] >> 2
+        const val2 = (2 << 6) | numbers[1] >> 2
+        const val3 = (3 << 6) | numbers[2] >> 2
+        const val4 = (0 << 6) | (numbers[0] & 3 << 4) | (numbers[1] & 3 << 2) | (numbers[2] & 3)
+
         if (this.writer != null) {
-            this.writer.write(numbers)
+            this.writer.write([val1, val2, val3, val4])
         }
 
         return <></>
