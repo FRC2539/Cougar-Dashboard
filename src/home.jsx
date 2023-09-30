@@ -5,6 +5,7 @@ import Mechanisms from "./components/mechanisms"
 import Robot from "./components/robot"
 import ConfigurableAutos from "./components/configurable-autos"
 import Pressure from "./components/pressure"
+import DriverstationLEDS from "./components/driverstationleds"
 
 export default class Home extends Component {
     constructor(props) {

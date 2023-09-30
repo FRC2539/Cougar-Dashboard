@@ -16,18 +16,6 @@ export default class DriverstationLEDS extends Component {
         this.ledColorKeyB = "/Robot/LEDS/b"
         this.readyToWrite = false;
         this.writer = null;
-
-        navigator.serial.RequestPort().then(
-            (port) => {
-                this.ledSerialPort = port;
-                port.open(9600).then(
-                    (e) => {
-                        this.readyToWrite = true;
-                        this.writer = this.ledSerialPort.getWriter()
-                    }
-                )
-            }
-        );
     }
 
     render() {
@@ -46,6 +34,16 @@ export default class DriverstationLEDS extends Component {
             this.writer.write([val1, val2, val3, val4])
         }
 
-        return <></>
+        return <button onClick={() => navigator.serial.requestPort().then(
+            (port) => {
+                this.ledSerialPort = port;
+                port.open(9600).then(
+                    (e) => {
+                        this.readyToWrite = true;
+                        this.writer = this.ledSerialPort.getWriter()
+                    }
+                )
+            }
+        )}>Click me</button>
     }
 }
