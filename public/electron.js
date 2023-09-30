@@ -72,7 +72,7 @@ function createWindow() {
 	})
 
 	ipcMain.handle("get-team-number", async (event, args) => {
-		return await store.get("team", "2539")
+		return await store.get("team", "9539")
 	})
 
 	if (isDev) mainWindow.webContents.openDevTools()
