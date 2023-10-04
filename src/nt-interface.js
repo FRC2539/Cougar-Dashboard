@@ -59,13 +59,16 @@ export const createNetworkTablesInterface = (
     }
 
     const initialize = async () => {
-        const teamNumber = await window.api.getTeamNumber()
+        //const teamNumber = await window.api.getTeamNumber()
+        const teamNumber = 9539
+
         if (host === "") host = convertTeamNumberToIP(teamNumber)
 
         connect()
 
         window.api.handleConnect(async (mode) => {
-            const teamNumber = await window.api.getTeamNumber()
+            // const teamNumber = await window.api.getTeamNumber()
+            const teamNumber = 9539
 
             switch (mode) {
                 case "robot":
