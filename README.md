@@ -16,7 +16,9 @@ Download the latest setup exe file from [github releases](https://github.com/FRC
 2. Identify the path to the installed app. This path should be `C:\Users\[YOUR USERNAME HERE]\AppData\Local\Programs\Cougar-Dashboard\Cougar-Dashboard.exe`. If you can't find the app at that location, find the desktop shortcut to the dashboard app, right click and open properties, and you will find the path labelled **target**.
 3. Edit the configuration file for the driver station app (this assumes the driver station app is already installed). See instructions here: [Official Instructions](https://docs.wpilib.org/en/stable/docs/software/driverstation/manually-setting-the-driver-station-to-start-custom-dashboard.html). When you replace the `DashboardCmdLine`, replace it with `""C:\Users\[YOUR USERNAME HERE]\AppData\Local\Programs\Cougar-Dashboard\Cougar-Dashboard.exe""`, or whichever path you identified in step 2.
 
-### Changing Team Number
+## Configuration
+
+#### Changing Team Number
 
 To change the team number, you need to edit the configuration file (or create one).
 
@@ -26,6 +28,15 @@ To change the team number, you need to edit the configuration file (or create on
 ```json
 {
     "team": "2539"
+}
+```
+
+#### Changing Camera Feeds
+
+```json
+{
+    "primary": "http://10.25.39.11:5800",
+    "secondary": "http://10.25.39.12:5800"
 }
 ```
 

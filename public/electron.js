@@ -15,6 +15,12 @@ const Store = require("electron-store")
 const schema = {
 	team: {
 		type: "string"
+	},
+	primary: {
+		type: "string"
+	},
+	secondary: {
+		type: "string"
 	}
 }
 
@@ -69,6 +75,17 @@ function createWindow() {
 		const webContents = event.sender
 		const win = BrowserWindow.fromWebContents(webContents)
 		win.setTitle(title)
+	})
+
+	ipcMain.handle("get-camera-ip", async (event, cameraKey) => {
+		switch (cameraKey) {
+			case "primary":
+				return await store.get("primary", "http://10.25.39.11:5800")
+			case "secondary":
+				return await store.get("secondary", "http://10.25.39.12:5800")
+			default:
+				return await store.get(cameraKey, "")
+		}
 	})
 
 	ipcMain.handle("get-team-number", async (event, args) => {
